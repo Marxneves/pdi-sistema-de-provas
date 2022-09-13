@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 
-use App\Packages\Temas\Domain\Model\Temas;
+use App\Packages\Tema\Domain\Repository\TemaRepository;
+use App\Packages\Tema\Facade\TemaFacade;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class TemasController extends Controller
 {
+    public function __construct(TemaRepository $temaRepository, TemaFacade $temaFacade)
+    {
+        $this->temaRepository = $temaRepository;
+        $this->temaFacade = $temaFacade;
+    }
+
     public function index()
     {
-        $temas = EntityManager::getRepository(Temas::class)->findAll();
+        $temas = $this->temaRepository->findAll();
         $response = array_map(fn($tema) => [
             'id' => $tema->getId(),
             'name' => $tema->getName(),
@@ -24,15 +29,7 @@ class TemasController extends Controller
     public function store(Request $request)
     {
         try {
-            $name = $request->get('name');
-            $slugname = $request->get('slugname');
-            $tema = EntityManager::getRepository(Temas::class)->findOneBy(['slugname' => $slugname]);
-            if($tema instanceof Temas) {
-                throw new \Exception('o tema já existe.');
-            }
-            $tema = new Temas(Str::uuid(),$name , $slugname);
-            EntityManager::persist($tema);
-            EntityManager::flush();
+            $tema = $this->temaFacade->create($request->get('name'), $request->get('slugname'));
             return response()->json(
                 ['data' =>
                     [

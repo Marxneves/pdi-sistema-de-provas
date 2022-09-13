@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Packages\Questoes\Domain\Model;
+namespace App\Packages\Questao\Domain\Model;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="respostas")
+ * @ORM\Table(name="alternativas")
  */
-class Respostas
+class Alternativa
 {
+    use TimestampableEntity;
+
     public function __construct(
         /**
          * @ORM\Id
@@ -17,18 +20,22 @@ class Respostas
          * @ORM\GeneratedValue(strategy="CUSTOM")
          * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
          */
-        private string $id,
+        private string  $id,
+
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Questoes\Domain\Model\Questoes",
-         *     inversedBy="respostas"
+         *     targetEntity="App\Packages\Questao\Domain\Model\Questao",
+         *     fetch="EXTRA_LAZY",
+         *     inversedBy="alternativas",
          * )
          */
-        private Questoes $questao,
+        private Questao $questao,
+
         /** @ORM\Column(type="string") */
-        private string $resposta,
+        private string  $resposta,
+
         /** @ORM\Column(type="boolean") */
-        private bool $correta,
+        private bool    $isCorreta,
     )
     {
     }
@@ -38,7 +45,7 @@ class Respostas
         return $this->id;
     }
 
-    public function getQuestao(): Questoes
+    public function getQuestao(): Questao
     {
         return $this->questao;
     }
@@ -50,7 +57,7 @@ class Respostas
 
     public function isCorreta(): bool
     {
-        return $this->correta;
+        return $this->isCorreta;
     }
 
 }

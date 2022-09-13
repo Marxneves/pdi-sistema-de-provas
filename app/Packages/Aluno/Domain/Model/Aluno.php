@@ -1,24 +1,29 @@
 <?php
 
-namespace App\Packages\Temas\Domain\Model;
+namespace App\Packages\Aluno\Domain\Model;
 
-use App\Packages\Questoes\Domain\Model\Questoes;
+use App\Packages\Prova\Domain\Model\Prova;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="temas")
+ * @ORM\Table(name="alunos")
  */
-class Temas
+class Aluno
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\OneToMany(
-     *     targetEntity="App\Packages\Questoes\Domain\Model\Questoes",
+     *     targetEntity="App\Packages\Prova\Domain\Model\Prova",
      *     fetch="EXTRA_LAZY",
-     *     mappedBy="temas"
+     *     mappedBy="aluno",
      * )
      */
-    private ?Questoes $questoes = null;
+    private Collection $provas;
 
     public function __construct(
         /**
@@ -28,12 +33,12 @@ class Temas
          * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
          */
         private string $id,
+
         /** @ORM\Column(type="string") */
-        private string $name,
-        /** @ORM\Column(type="string") */
-        private string $slugname,
+        private string $nome,
     )
     {
+        $this->provas = new ArrayCollection;
     }
 
     public function getId(): string
@@ -41,13 +46,8 @@ class Temas
         return $this->id;
     }
 
-    public function getName(): string
+    public function getNome(): string
     {
-        return $this->name;
-    }
-
-    public function getSlugname(): string
-    {
-        return $this->slugname;
+        return $this->nome;
     }
 }

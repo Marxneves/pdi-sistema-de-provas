@@ -15,6 +15,12 @@ serve:
 shell:
 	@docker-compose -f ./docker-compose.yaml exec api bash
 
+run:
+	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "/var/www/artisan $(filter-out $@, $(MAKECMDGOALS))"
+
+help:
+	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "/var/www/artisan doctrine:generate:proxies && composer dump-autoload && chmod -R 777 storage/proxies"
+
 db_update:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan migrate && php artisan db:seed"
 
@@ -23,3 +29,6 @@ all-tests:
 
 key-generate:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan key:generate"
+
+fix-migrations-permissions:
+	@chmod -R 1000:1000 database/migrations/*

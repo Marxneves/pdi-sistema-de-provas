@@ -16,3 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('temas','TemasController@index');
 Route::post('temas','TemasController@store');
+
+Route::get('questoes','QuestoesController@index');
+Route::post('questoes','QuestoesController@store');
+
+Route::get('questoes/{questao}','QuestoesController@listRepostas');
+Route::post('questoes/{questao}','QuestoesController@createResposta');
+
