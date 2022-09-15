@@ -4,6 +4,7 @@ namespace App\Packages\Prova\Domain\Model;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
@@ -25,25 +26,12 @@ class Prova
         private string $id,
 
         /**
-         * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Aluno\Domain\Model\Aluno",
-         *     fetch="EXTRA_LAZY",
-         *     inversedBy="provas"
-         * )
+         * @ORM\ManyToMany(targetEntity="App\Packages\Questao\Domain\Model\Questao")
+         * @ORM\JoinTable(name="prova_questoes", joinColumns={@ORM\JoinColumn(name="prova_id", referencedColumnName="id")},
+         *      inverseJoinColumns={@ORM\JoinColumn(name="questao_id", referencedColumnName="id", unique=true)}
+         *      )
          */
-        private Aluno $aluno,
-
-        /**
-         * @ORM\OneToMany (
-         *     targetEntity="App\Packages\Questao\Domain\Model\Questao",
-         *     fetch="EXTRA_LAZY",
-         *     mappedBy="prova",
-         * )
-         */
-        private ArrayCollection $questoes,
-
-        /** @ORM\Column(type="string", options={"default":"Aberta"}) */
-        private ?string $status,
+        private Collection $questoes,
 
         /** @ORM\Column(type="float", nullable=true) */
         private ?float $nota,
@@ -52,7 +40,10 @@ class Prova
         private ?\DateTime $submetidaEm,
 
         /** @ORM\Column(type="jsonb", nullable=true) */
-        private ?ArrayCollection $respostasAluno,
+        private ?array $respostasAluno,
+
+        /** @ORM\Column(type="string", options={"default":"Aberta"}) */
+        private ?string $status='Aberta',
     )
     {
     }
@@ -62,12 +53,7 @@ class Prova
         return $this->id;
     }
 
-    public function getAluno(): Aluno
-    {
-        return $this->aluno;
-    }
-
-    public function getNota(): float
+    public function getNota(): ?float
     {
         return $this->nota;
     }
@@ -77,7 +63,7 @@ class Prova
         $this->nota = $nota;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -87,7 +73,7 @@ class Prova
         $this->status = $status;
     }
 
-    public function getSubmetidaEm(): \DateTime
+    public function getSubmetidaEm(): ?\DateTime
     {
         return $this->submetidaEm;
     }
@@ -97,18 +83,25 @@ class Prova
         $this->submetidaEm = $submetidaEm;
     }
 
-    public function getRespostasAluno(): ?ArrayCollection
+    public function getRespostasAluno(): ?array
     {
         return $this->respostasAluno;
     }
 
-    public function setRespostasAluno(?ArrayCollection $respostasAluno): void
+    public function setRespostasAluno(?array $respostasAluno): void
     {
         $this->respostasAluno = $respostasAluno;
     }
 
-    public function getQuestoes(): ArrayCollection
+    public function getQuestoes(): Collection
     {
         return $this->questoes;
+    }
+
+    public function responder(array $respostas): void
+    {
+        $this->respostasAluno = $respostas;
+        $this->submetidaEm = new \DateTime();
+        $this->status = 'Concluida';
     }
 }

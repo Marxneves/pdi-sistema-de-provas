@@ -19,11 +19,6 @@ class Questao
     use TimestampableEntity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Packages\Aluno\Domain\Model\Aluno", fetch="EXTRA_LAZY", inversedBy="questoes", cascade={"all"})
-     */
-    private ?Prova $prova;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Packages\Questao\Domain\Model\Alternativa", fetch="EXTRA_LAZY", mappedBy="questao", cascade={"all"})
      */
     private ?Collection $alternativas;

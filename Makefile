@@ -31,4 +31,4 @@ key-generate:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan key:generate"
 
 fix-migrations-permissions:
-	@chmod -R 1000:1000 database/migrations/*
+	@sudo chmod -R 777 database/migrations/*

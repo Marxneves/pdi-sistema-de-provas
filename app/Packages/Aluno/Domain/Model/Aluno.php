@@ -17,11 +17,10 @@ class Aluno
     use TimestampableEntity;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="App\Packages\Prova\Domain\Model\Prova",
-     *     fetch="EXTRA_LAZY",
-     *     mappedBy="aluno",
-     * )
+     * @ORM\ManyToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova")
+     * @ORM\JoinTable(name="alunos_provas", joinColumns={@ORM\JoinColumn(name="aluno_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="prova_id", referencedColumnName="id", unique=true)}
+     *      )
      */
     private Collection $provas;
 
@@ -49,5 +48,15 @@ class Aluno
     public function getNome(): string
     {
         return $this->nome;
+    }
+
+    public function getProvas(): Collection
+    {
+        return $this->provas;
+    }
+
+    public function addProva(Prova $prova)
+    {
+        $this->provas->add($prova);
     }
 }
