@@ -19,7 +19,7 @@ class TemaFacade
     {
         $tema = $this->temaRepository->findOneBySlugname($slugname);
         if($tema instanceof Tema) {
-            throw new \Exception('o tema já existe.');
+            throw new \Exception('o tema já existe.', 1663702757);
         }
         $tema = new Tema(Str::uuid(), $name, $slugname);
         EntityManager::persist($tema);

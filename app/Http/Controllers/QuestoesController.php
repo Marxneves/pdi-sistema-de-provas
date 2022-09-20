@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Utilities\HttpStatusConstants;
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Questao\Facade\QuestaoFacade;
@@ -24,19 +25,19 @@ class QuestoesController extends Controller
             'id' => $questao->getId(),
             'tema' => [
                 'id' => $questao->getTema()->getId(),
-                'name' => $questao->getTema()->getName(),
+                'name' => $questao->getTema()->getNome(),
                 'slugname' => $questao->getTema()->getSlugname(),
             ],
             'pergunta' => $questao->getPergunta(),
             'respostas' => [
                 array_map(fn($resposta) => [
                     'id' => $resposta->getId(),
-                    'resposta' => $resposta->getResposta(),
+                    'resposta' => $resposta->getAlternativa(),
                     'correta' => $resposta->isCorreta(),
                 ], $questao->getRespostas()->toArray())
             ]
         ], $questoes);
-        return response()->json(['data' => $response]);
+        return response()->json(['data' => $response], HttpStatusConstants::OK);
     }
 
     public function store(Request $request)
@@ -49,14 +50,14 @@ class QuestoesController extends Controller
                         'id' => $questao->getId(),
                         'tema' => [
                             'id' => $questao->getTema()->getId(),
-                            'name' => $questao->getTema()->getName(),
+                            'name' => $questao->getTema()->getNome(),
                             'slugname' => $questao->getTema()->getSlugname(),
                         ],
                         'pergunta' => $questao->getPergunta(),
                     ]
-                ], 201);
+                ], HttpStatusConstants::CREATED);
         } catch (\Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 400);
+            return response()->json(['error' => $exception->getMessage()], HttpStatusConstants::BAD_REQUEST);
         }
     }
 
@@ -70,10 +71,10 @@ class QuestoesController extends Controller
                 'nome' => $resposta->getQuestao()->getPergunta(),
             ],
             'id' => $resposta->getId(),
-            'resposta' => $resposta->getResposta(),
+            'resposta' => $resposta->getAlternativa(),
             'correta' => $resposta->isCorreta(),
         ], $respostas->toArray());
-        return response()->json(['data' => $response]);
+        return response()->json(['data' => $response], HttpStatusConstants::OK);
     }
 
     public function createResposta(Questao $questao, Request $request)
@@ -89,21 +90,21 @@ class QuestoesController extends Controller
                         'id' => $questao->getId(),
                         'tema' => [
                             'id' => $questao->getTema()->getId(),
-                            'name' => $questao->getTema()->getName(),
+                            'name' => $questao->getTema()->getNome(),
                             'slugname' => $questao->getTema()->getSlugname(),
                         ],
                         'pergunta' => $questao->getPergunta(),
                         'respostas' => [
                             array_map(fn($resposta) => [
                                 'id' => $resposta->getId(),
-                                'resposta' => $resposta->getResposta(),
+                                'resposta' => $resposta->getAlternativa(),
                                 'correta' => $resposta->isCorreta(),
                             ], $respostas->toArray())
                         ]
                     ]
-                ], 201);
+                ], HttpStatusConstants::CREATED);
         } catch (\Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 400);
+            return response()->json(['error' => $exception->getMessage()], HttpStatusConstants::BAD_REQUEST);
         }
     }
 }

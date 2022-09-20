@@ -23,12 +23,12 @@ class ResponderProvaCommand extends Command
         $prova = EntityManager::getRepository(Prova::class)->findOneBy([]);
         $respostas = [
             [
-                'questaoId'=> '1d56ed50-f65d-4db7-8e3c-b44f0d2e9f40',
-                'respostaSelecionaId' => '1e14c412-a73f-4895-88fa-7aa44c5823b7'
+                'questaoId'=> 'c7301a9d-1d8f-4997-8371-4929c3e49720',
+                'respostaAluno' => 'Java é uma linguagem de programação, JavaScript é uma linguagem de programação.'
             ],
             [
-                'questaoId'=> 'f94453f6-e9b9-4931-a8c7-8f1507747ac7',
-                'respostaSelecionaId' => 'ee8ca6e1-1860-446c-bb3b-742e565d7c22'
+                'questaoId'=> '7d051961-c518-4845-aaf1-e466c94a4dd0',
+                'respostaAluno' => 'Java é uma linguagem de script, C# é uma linguagem de programação.'
             ],
         ];
         $prova->responder($respostas);

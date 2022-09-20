@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Packages\Questao\Domain\Model;
+namespace App\Packages\Prova\Domain\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="alternativas")
+ * @ORM\Table(name="alternativas_prova")
  */
-class Alternativa
+class AlternativaProva
 {
     use TimestampableEntity;
 
@@ -24,12 +24,12 @@ class Alternativa
 
         /**
          * @ORM\ManyToOne(
-         *     targetEntity="App\Packages\Questao\Domain\Model\Questao",
+         *     targetEntity="App\Packages\Prova\Domain\Model\QuestaoProva",
          *     fetch="EXTRA_LAZY",
          *     inversedBy="alternativas",
          * )
          */
-        private Questao $questao,
+        private QuestaoProva $questao,
 
         /** @ORM\Column(type="string") */
         private string  $alternativa,
@@ -45,7 +45,7 @@ class Alternativa
         return $this->id;
     }
 
-    public function getQuestao(): Questao
+    public function getQuestao(): QuestaoProva
     {
         return $this->questao;
     }

@@ -1,0 +1,134 @@
+{
+  "tema": {
+    "nome": "Linguagem de Programação",
+    "slugname": "linguagem_programacao"
+  },
+  "questoes": [
+    {
+      "pergunta": "Qual a linguagem de programação mais utilizada no mundo?",
+      "alternativas": [
+        {
+          "alternativa": "Java",
+          "correta": false
+        },
+        {
+          "alternativa": "C#",
+          "correta": false
+        },
+        {
+          "alternativa": "PHP",
+          "correta": true
+        },
+        {
+          "alternativa": "Python",
+          "correta": false
+        }
+      ]
+    },
+    {
+      "pergunta": "Qual a linguagem de programação mais utilizada no Brasil?",
+      "alternativas": [
+        {
+          "alternativa": "Java",
+          "correta": false
+        },
+        {
+          "alternativa": "C#",
+          "correta": false
+        },
+        {
+          "alternativa": "PHP",
+          "correta": false
+        },
+        {
+          "alternativa": "Python",
+          "correta": true
+        }
+      ]
+    },
+    {
+      "pergunta": "Qual a linguagem de programação menos utilizada no mundo?",
+      "alternativas": [
+        {
+          "alternativa": "Java",
+          "correta": false
+        },
+        {
+          "alternativa": "C#",
+          "correta": true
+        },
+        {
+          "alternativa": "PHP",
+          "correta": false
+        },
+        {
+          "alternativa": "Python",
+          "correta": false
+        }
+      ]
+    },
+    {
+      "pergunta": "Qual a linguagem de programação menos utilizada no Brasil?",
+      "alternativas": [
+        {
+          "alternativa": "Java",
+          "correta": false
+        },
+        {
+          "alternativa": "C#",
+          "correta": true
+        },
+        {
+          "alternativa": "PHP",
+          "correta": false
+        },
+        {
+          "alternativa": "Python",
+          "correta": false
+        }
+      ]
+    },
+    {
+      "pergunta": "Qual a linguagem de programação mais utilizada para full-stack?",
+      "alternativas": [
+        {
+          "alternativa": "Java",
+          "correta": false
+        },
+        {
+          "alternativa": "JavaScript",
+          "correta": true
+        },
+        {
+          "alternativa": "PHP",
+          "correta": false
+        },
+        {
+          "alternativa": "Python",
+          "correta": false
+        }
+      ]
+    },
+    {
+      "pergunta": "Qual desses não é um framework javascript?",
+      "alternativas": [
+        {
+          "alternativa": "Vue.JS",
+          "correta": false
+        },
+        {
+          "alternativa": "Angule.JS",
+          "correta": true
+        },
+        {
+          "alternativa": "React.JS",
+          "correta": false
+        },
+        {
+          "alternativa": "Angular",
+          "correta": false
+        }
+      ]
+    }
+  ]
+}

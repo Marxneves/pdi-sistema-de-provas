@@ -3,10 +3,12 @@
 namespace App\Packages\Prova\Domain\Model;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
+use App\Packages\Tema\Domain\Model\Tema;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Illuminate\Support\Str;
 
 /**
  * @ORM\Entity
@@ -15,6 +17,14 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 class Prova
 {
     use TimestampableEntity;
+
+    const CONCLUIDA = 'Concluida';
+    const ABERTA = 'Aberta';
+
+    /**
+     * @ORM\OneToMany (targetEntity="QuestaoProva", mappedBy="prova", cascade={"all"})
+     */
+    private Collection $questoes;
 
     public function __construct(
         /**
@@ -26,26 +36,41 @@ class Prova
         private string $id,
 
         /**
-         * @ORM\ManyToMany(targetEntity="App\Packages\Questao\Domain\Model\Questao")
-         * @ORM\JoinTable(name="prova_questoes", joinColumns={@ORM\JoinColumn(name="prova_id", referencedColumnName="id")},
-         *      inverseJoinColumns={@ORM\JoinColumn(name="questao_id", referencedColumnName="id", unique=true)}
-         *      )
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Aluno\Domain\Model\Aluno",
+         *     inversedBy="provas"
+         * )
          */
-        private Collection $questoes,
+        private Aluno   $aluno,
+
+        /**
+         * @ORM\ManyToOne(
+         *     targetEntity="App\Packages\Tema\Domain\Model\Tema",
+         *     inversedBy="provas"
+         * )
+         */
+        private Tema   $tema,
 
         /** @ORM\Column(type="float", nullable=true) */
-        private ?float $nota,
+        private ?float $nota = null,
 
         /** @ORM\Column(type="datetime", nullable=true) */
-        private ?\DateTime $submetidaEm,
-
-        /** @ORM\Column(type="jsonb", nullable=true) */
-        private ?array $respostasAluno,
+        private ?\DateTime $submetidaEm = null,
 
         /** @ORM\Column(type="string", options={"default":"Aberta"}) */
         private ?string $status='Aberta',
     )
     {
+        $this->questoes = new ArrayCollection;
+    }
+
+    public function setQuestoes(array $questoesCollection)
+    {
+        foreach ($questoesCollection as $questao) {
+            $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
+            $questaoProva->setAlternativas($questao->getAlternativas());
+            $this->questoes->add($questaoProva);
+        }
     }
 
     public function getId(): string
@@ -83,25 +108,39 @@ class Prova
         $this->submetidaEm = $submetidaEm;
     }
 
-    public function getRespostasAluno(): ?array
-    {
-        return $this->respostasAluno;
-    }
-
-    public function setRespostasAluno(?array $respostasAluno): void
-    {
-        $this->respostasAluno = $respostasAluno;
-    }
-
     public function getQuestoes(): Collection
     {
         return $this->questoes;
     }
 
-    public function responder(array $respostas): void
+    public function responder(\Illuminate\Support\Collection $respostas): void
     {
-        $this->respostasAluno = $respostas;
         $this->submetidaEm = new \DateTime();
-        $this->status = 'Concluida';
+        $this->status = self::CONCLUIDA;
+
+        if($this->submetidaEm->diff($this->createdAt)->h >= 1 ) {
+            $this->nota = 0;
+            throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
+        }
+
+        $questoes = $this->getQuestoes();
+        $questoesCorretas = 0;
+        foreach ($questoes as $questao) {
+            /** @var QuestaoProva $questao */
+            foreach ($respostas as $resposta) {
+                if($questao->getId() === $resposta->getQuestaoId()) {
+                    $questao->setRespostaAluno($resposta->getRespostaAluno());
+                    if($questao->getRespostaCorreta() === $resposta->getRespostaAluno()) {
+                        $questoesCorretas += 1;
+                    }
+                }
+            }
+        }
+        $this->nota = $questoesCorretas * (10 / $questoes->count());
+    }
+
+    public function getTema(): Tema
+    {
+        return $this->tema;
     }
 }

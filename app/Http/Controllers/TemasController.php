@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Utilities\HttpStatusConstants;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
 use App\Packages\Tema\Facade\TemaFacade;
 use Illuminate\Http\Request;
@@ -20,10 +21,10 @@ class TemasController extends Controller
         $temas = $this->temaRepository->findAll();
         $response = array_map(fn($tema) => [
             'id' => $tema->getId(),
-            'name' => $tema->getName(),
+            'name' => $tema->getNome(),
             'slugname' => $tema->getSlugname(),
         ], $temas);
-        return response()->json(['data' => $response]);
+        return response()->json(['data' => $response], HttpStatusConstants::OK);
     }
 
     public function store(Request $request)
@@ -34,12 +35,12 @@ class TemasController extends Controller
                 ['data' =>
                     [
                         'id' => $tema->getId(),
-                        'name' => $tema->getName(),
+                        'name' => $tema->getNome(),
                         'slugname' => $tema->getSlugname(),
                     ]
-                ], 201);
+                ], HttpStatusConstants::OK);
         } catch (\Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 400);
+            return response()->json(['error' => $exception->getMessage()], HttpStatusConstants::BAD_REQUEST);
         }
     }
 }

@@ -17,10 +17,7 @@ class Aluno
     use TimestampableEntity;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova")
-     * @ORM\JoinTable(name="alunos_provas", joinColumns={@ORM\JoinColumn(name="aluno_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="prova_id", referencedColumnName="id", unique=true)}
-     *      )
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova" , mappedBy="aluno")
      */
     private Collection $provas;
 

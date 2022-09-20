@@ -20,9 +20,8 @@ class QuestaoFacade
     {
         $tema = $this->temaRepository->findOneBySlugname($temaSlugname);
         if (!$tema instanceof Tema) {
-            throw new \Exception('O tema da questão não existe');
+            throw new \Exception('O tema da questão não existe', 1663702752);
         }
-
         $questao = new Questao(Str::uuid(), $tema, $pergunta);
         EntityManager::persist($questao);
         EntityManager::flush();

@@ -4,6 +4,7 @@ namespace App\Packages\Aluno\Command;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Model\Prova;
+use App\Packages\Prova\Domain\Model\QuestaoProva;
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Tema\Domain\Model\Tema;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -44,9 +45,13 @@ class GerarProvaAlunoCommand extends Command
         $questoesCollection->add($questao);
         $questoesCollection->add($questao2);
 
-        $prova = new Prova(Str::uuid(),$questoesCollection, null, null, null);
+        $prova = new Prova(Str::uuid(),$aluno, $tema);
+        $prova->setQuestoes($questoesCollection);
+        foreach ($questoesCollection as $questao) {
+            $questaoProva = new QuestaoProva($questao->getId(), $prova, $questao->getPergunta());
+            $questaoProva->setAlternativas($questao->getAlternativas());
+        };
         EntityManager::persist($prova);
-        $aluno->addProva($prova);
         EntityManager::flush();
     }
 }

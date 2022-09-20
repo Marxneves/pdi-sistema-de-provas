@@ -2,7 +2,6 @@
 
 namespace App\Packages\Questao\Domain\Model;
 
-use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Tema\Domain\Model\Tema;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

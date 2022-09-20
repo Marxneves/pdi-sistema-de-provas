@@ -1,5 +1,6 @@
 <?php
 
+use App\Packages\Doctrine\Functions\Random;
 use Ramsey\Uuid\Doctrine\UuidType;
 use App\Packages\Doctrine\Domain\Types\JsonbType;
 
@@ -129,13 +130,17 @@ return [
     | DQL custom numeric functions
     |--------------------------------------------------------------------------
     */
-    'custom_numeric_functions'   => [],
+    'custom_numeric_functions'   => [
+
+        'RANDOM' => Random::class
+    ],
     /*
     |--------------------------------------------------------------------------
     | DQL custom string functions
     |--------------------------------------------------------------------------
     */
-    'custom_string_functions'    => [],
+    'custom_string_functions'    => [
+    ],
     /*
     |--------------------------------------------------------------------------
     | Register custom hydrators

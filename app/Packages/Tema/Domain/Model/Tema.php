@@ -16,6 +16,11 @@ class Tema
     use TimestampableEntity;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Packages\Prova\Domain\Model\Prova", mappedBy="tema")
+     */
+    private ?Collection $provas;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Packages\Questao\Domain\Model\Questao", mappedBy="tema")
      */
     private ?Collection $questoes;
@@ -29,7 +34,7 @@ class Tema
          */
         private string $id,
         /** @ORM\Column(type="string") */
-        private string $name,
+        private string $nome,
         /** @ORM\Column(type="string") */
         private string $slugname,
     )
@@ -42,9 +47,9 @@ class Tema
         return $this->id;
     }
 
-    public function getName(): string
+    public function getNome(): string
     {
-        return $this->name;
+        return $this->nome;
     }
 
     public function getSlugname(): string
