@@ -25,7 +25,7 @@ class TemaFacade
     public function throwExceptionSeTemaJaExistir(?Tema $tema): void
     {
         if ($tema instanceof Tema) {
-            throw new \Exception('o tema já existe.', 1663702757);
+            throw new \Exception('O tema já existe.', 1663702757);
         }
     }
 }

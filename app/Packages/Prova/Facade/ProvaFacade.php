@@ -19,7 +19,7 @@ class ProvaFacade
     public function create(Aluno $aluno, string $tema): Prova
     {
         $tema = $this->temaRepository->findOneBySlugname($tema);
-        $numeroAleatorio = rand(1, 20);
+        $numeroAleatorio = rand(4, 20);
         $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorio);
         $prova = new Prova(Str::uuid(), $aluno, $tema);
         $prova->setQuestoes($questoesCollection);

@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Utilities\HttpStatusConstants;
+use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Aluno\Domain\Repository\AlunoRepository;
 use App\Packages\Aluno\Facade\AlunoFacade;
+use App\Packages\Prova\Domain\Model\Prova;
 use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
-    public function __construct(AlunoRepository $alunoRepository, AlunoFacade $alunoFacade)
+    public function __construct(private AlunoRepository $alunoRepository, private AlunoFacade $alunoFacade)
     {
-        $this->alunoRepository = $alunoRepository;
-        $this->alunoFacade = $alunoFacade;
     }
 
     public function index()
@@ -32,14 +32,33 @@ class AlunoController extends Controller
             $aluno = $this->alunoFacade->create($request->get('nome'));
             $this->alunoRepository->flush();
             return response()->json(
-                ['data' =>
-                    [
+                [
+                    'data' => [
                         'id' => $aluno->getId(),
                         'nome' => $aluno->getNome(),
                     ]
-                ], 201);
+                ], HttpStatusConstants::CREATED);
         } catch (\Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], HttpStatusConstants::BAD_REQUEST);
         }
+    }
+
+    public function listProvas(Aluno $aluno)
+    {
+        $response = array_map(fn($prova) => [
+            'id' => $prova->getId(),
+            'questoes' => array_map(fn($questao) => [
+                'id' => $questao->getId(),
+                'pergunta' => $questao->getPergunta(),
+                'respostaCorreta' => $questao->getRespostaCorreta(),
+                'respostaAluno' => $questao->getRespostaAluno(),
+            ], $prova->getQuestoes()->toArray()),
+            'status' => $prova->getStatus(),
+            'nota' => $prova->getNota(),
+            'notaMaxima' => Prova::NOTA_MAXIMA
+        ], $aluno->getProvas()->toArray());
+        return response()->json([
+            'data' => $response
+        ], HttpStatusConstants::OK);
     }
 }

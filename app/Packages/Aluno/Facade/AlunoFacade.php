@@ -9,9 +9,8 @@ use Illuminate\Support\Str;
 
 class AlunoFacade
 {
-    public function __construct(AlunoRepository $alunoRepository)
+    public function __construct(private AlunoRepository $alunoRepository)
     {
-        $this->alunoRepository = $alunoRepository;
     }
 
     public function create(string $nome)

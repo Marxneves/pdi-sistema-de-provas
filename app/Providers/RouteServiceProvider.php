@@ -19,7 +19,14 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/home';
 
-    protected $namespace =  'App\Http\Controllers';
+    protected $namespace = 'App\Http\Controllers';
+
+    private $routes = [
+        'aluno',
+        'prova',
+        'questao',
+        'tema',
+    ];
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -39,6 +46,17 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
+
+        $this->mapApiRoutes();
+    }
+
+    private function mapApiRoutes() {
+        foreach ($this->routes as $route) {
+            Route::middleware('api')
+                ->namespace($this->namespace)
+                ->prefix('api')
+                ->group(base_path("routes/{$route}.php"));
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Packages\Prova\Domain\Model;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
+use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Tema\Domain\Model\Tema;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,6 +19,7 @@ class Prova
 {
     use TimestampableEntity;
 
+    const NOTA_MAXIMA = 10;
     const CONCLUIDA = 'Concluida';
     const ABERTA = 'Aberta';
 
@@ -67,6 +69,7 @@ class Prova
     public function setQuestoes(array $questoesCollection)
     {
         foreach ($questoesCollection as $questao) {
+            /** @var Questao $questao */
             $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
             $questaoProva->setAlternativas($questao->getAlternativas());
             $this->questoes->add($questaoProva);
@@ -115,32 +118,53 @@ class Prova
 
     public function responder(\Illuminate\Support\Collection $respostas): void
     {
-        $this->submetidaEm = new \DateTime();
+        $this->submetidaEm = now();
         $this->status = self::CONCLUIDA;
 
-        if($this->submetidaEm->diff($this->createdAt)->h >= 1 ) {
-            $this->nota = 0;
-            throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
-        }
+        $this->throwExceptionIfProvaForaDoPrazo();
 
-        $questoes = $this->getQuestoes();
         $questoesCorretas = 0;
-        foreach ($questoes as $questao) {
-            /** @var QuestaoProva $questao */
-            foreach ($respostas as $resposta) {
-                if($questao->getId() === $resposta->getQuestaoId()) {
-                    $questao->setRespostaAluno($resposta->getRespostaAluno());
-                    if($questao->getRespostaCorreta() === $resposta->getRespostaAluno()) {
-                        $questoesCorretas += 1;
-                    }
-                }
-            }
-        }
-        $this->nota = $questoesCorretas * (10 / $questoes->count());
+        [$questoes, $questoesCorretas] = $this->verificaRespostasCorretasDoAluno($respostas, $questoesCorretas);
+
+        $this->calculaNotaProva($questoesCorretas, $questoes);
     }
 
     public function getTema(): Tema
     {
         return $this->tema;
+    }
+    
+    private function throwExceptionIfProvaForaDoPrazo(): void
+    {
+        if ($this->submetidaEm->diff($this->createdAt)->h >= 1) {
+            $this->nota = 0;
+            throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
+        }
+    }
+
+    private function verificaRespostasCorretasDoAluno(\Illuminate\Support\Collection $respostas, int $questoesCorretas): array
+    {
+        $questoesProva = $this->getQuestoes();
+        if ($questoesProva->count() === 0) {
+            throw new \Exception('Prova sem questões.', 1663727591);
+        }
+
+        foreach ($questoesProva as $questaoProva) {
+            /** @var QuestaoProva $questaoProva */
+            foreach ($respostas as $resposta) {
+                if ($questaoProva->getId() === $resposta->getQuestaoId()) {
+                    $questaoProva->setRespostaAluno($resposta->getRespostaAluno());
+                    if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
+                        $questoesCorretas += 1;
+                    }
+                }
+            }
+        }
+        return [$questoesProva, $questoesCorretas];
+    }
+
+    private function calculaNotaProva(mixed $questoesCorretas, Collection $questoes): void
+    {
+        $this->nota = $questoesCorretas * (10 / $questoes->count());
     }
 }

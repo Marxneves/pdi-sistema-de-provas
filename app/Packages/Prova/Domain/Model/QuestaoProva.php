@@ -49,6 +49,7 @@ class QuestaoProva
     )
     {
         $this->alternativas = new ArrayCollection;
+        $this->respostaCorreta = '';
     }
 
     public function getId(): string
