@@ -42,11 +42,7 @@ class QuestoesController extends Controller
                     'data' =>
                         [
                             'id' => $questao->getId(),
-                            'tema' => [
-                                'id' => $questao->getTema()->getId(),
-                                'name' => $questao->getTema()->getNome(),
-                                'slugname' => $questao->getTema()->getSlugname(),
-                            ],
+                            'tema' => $questao->getTema()->getNome(),
                             'pergunta' => $questao->getPergunta(),
                         ]
                 ], HttpStatusConstants::CREATED);
@@ -70,21 +66,17 @@ class QuestoesController extends Controller
         return response()->json(['data' => $response], HttpStatusConstants::OK);
     }
 
-    public function createResposta(Questao $questao, Request $request)
+    public function createRespostas(Questao $questao, Request $request)
     {
         try {
-            $questao = $this->questaoFacade->addAlternativa($questao, $request->get('resposta'), $request->get('isCorreta'));
+            $questao = $this->questaoFacade->addAlternativas($questao, $request->get('alternativas'));
             $this->questaoRepository->flush();
             $respostas = $questao->getRespostas();
             return response()->json(
                 ['data' =>
                     [
                         'id' => $questao->getId(),
-                        'tema' => [
-                            'id' => $questao->getTema()->getId(),
-                            'name' => $questao->getTema()->getNome(),
-                            'slugname' => $questao->getTema()->getSlugname(),
-                        ],
+                        'tema' => $questao->getTema()->getNome(),
                         'pergunta' => $questao->getPergunta(),
                         'respostas' => [
                             array_map(fn($resposta) => [

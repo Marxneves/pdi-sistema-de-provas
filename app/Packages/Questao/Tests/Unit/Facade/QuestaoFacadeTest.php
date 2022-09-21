@@ -52,8 +52,69 @@ class QuestaoFacadeTest extends TestCase
         $questaoRepository->expects($this->once())->method('update');
         $this->app->bind(QuestaoRepository::class, fn() => $questaoRepository);
 
-        $questao = app(QuestaoFacade::class)->addAlternativa($questao,'Resposta da questao', true);
-        self::assertSame('Resposta da questao', $questao->getAlternativas()[0]->getAlternativa());
+        $alternativas = [
+            ['resposta' => 'Resposta 1', 'isCorreta' => true],
+            ['resposta' => 'Resposta 2', 'isCorreta' => false],
+        ];
+        $questao = app(QuestaoFacade::class)->addAlternativas($questao, $alternativas);
+        self::assertSame('Resposta 1', $questao->getAlternativas()[0]->getAlternativa());
         self::assertTrue($questao->getAlternativas()[0]->isCorreta());
+    }
+
+    public function testIfThrowExceptionIfJaExistiremAlternativas()
+    {
+        $temaMock = $this->createMock(Tema::class);
+        $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
+
+        $questaoRepository = $this->createMock(QuestaoRepository::class);
+        $questaoRepository->expects($this->once())->method('update');
+        $this->app->bind(QuestaoRepository::class, fn() => $questaoRepository);
+
+        $alternativas = [
+            ['resposta' => 'Resposta 1', 'isCorreta' => true],
+            ['resposta' => 'Resposta 2', 'isCorreta' => false],
+        ];
+        app(QuestaoFacade::class)->addAlternativas($questao, $alternativas);
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('A questão já possui alternativas');
+        $this->expectExceptionCode(1663798294);
+
+        app(QuestaoFacade::class)->addAlternativas($questao, $alternativas);
+    }
+
+    public function exceptionProvider(): array
+    {
+        return [
+            'Nenhuma Alternativa correta' => [
+                'alternativas' => [
+                    ['resposta' => 'Resposta 1', 'isCorreta' => false],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                ],
+                'exceptionMessage' => 'A questão deve ter uma alternativa correta',
+                'exceptionCode' => 1663702752
+            ],
+            'Mais que uma alternativa correta' => [
+                'alternativas' => [
+                    ['resposta' => 'Resposta 1', 'isCorreta' => true],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => true],
+                ],
+                'exceptionMessage' => 'A questão só pode ter uma alternativa correta',
+                'exceptionCode' => 1663797428
+            ],
+        ];
+    }
+
+    /** @dataProvider exceptionProvider */
+    public function testIfThrowExceptionQuandoNaoTemSomenteUmaAlternativaCorreta(array $alternativas, string $exceptionMessage, int $exceptionCode)
+    {
+        $temaMock = $this->createMock(Tema::class);
+        $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($exceptionMessage);
+        $this->expectExceptionCode($exceptionCode);
+
+        app(QuestaoFacade::class)->addAlternativas($questao, $alternativas);
     }
 }
