@@ -30,6 +30,7 @@ class AlunoController extends Controller
     {
         try {
             $aluno = $this->alunoFacade->create($request->get('nome'));
+            $this->alunoRepository->flush();
             return response()->json(
                 ['data' =>
                     [

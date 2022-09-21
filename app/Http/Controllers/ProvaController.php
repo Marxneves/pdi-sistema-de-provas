@@ -5,19 +5,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Utilities\HttpStatusConstants;
 use App\Packages\Aluno\Domain\Model\Aluno;
-use App\Packages\Aluno\Facade\AlunoFacade;
 use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Prova\Domain\Repository\ProvaRepository;
 use App\Packages\Prova\Facade\ProvaFacade;
-use App\Packages\Tema\Domain\Model\Tema;
 use Illuminate\Http\Request;
 
 class ProvaController extends Controller
 {
-    public function __construct(ProvaRepository $provaRepository, ProvaFacade $provaFacade)
+    public function __construct(private ProvaRepository $provaRepository, private ProvaFacade $provaFacade)
     {
-        $this->provaRepository = $provaRepository;
-        $this->provaFacade = $provaFacade;
     }
 
     public function index()
@@ -34,6 +30,7 @@ class ProvaController extends Controller
     {
         try {
             $prova = $this->provaFacade->create($aluno, $request->get('tema'));
+            $this->provaRepository->flush();
             return response()->json(
                 ['data' => [
                     'id' => $prova->getId(),
@@ -62,6 +59,7 @@ class ProvaController extends Controller
     {
         try {
             $prova = $this->provaFacade->responder($prova, $request->get('respostas'));
+            $this->provaRepository->flush();
             return response()->json(
                 ['data' => [
                     'id' => $prova->getId(),

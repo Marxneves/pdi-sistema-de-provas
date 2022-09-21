@@ -6,7 +6,6 @@ namespace App\Packages\Aluno\Facade;
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Aluno\Domain\Repository\AlunoRepository;
 use Illuminate\Support\Str;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class AlunoFacade
 {
@@ -18,8 +17,7 @@ class AlunoFacade
     public function create(string $nome)
     {
         $aluno = new Aluno(Str::uuid(), $nome);
-        EntityManager::persist($aluno);
-        EntityManager::flush();
+        $this->alunoRepository->add($aluno);
         return $aluno;
     }
 }

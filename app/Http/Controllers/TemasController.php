@@ -10,10 +10,8 @@ use Illuminate\Http\Request;
 
 class TemasController extends Controller
 {
-    public function __construct(TemaRepository $temaRepository, TemaFacade $temaFacade)
+    public function __construct(private TemaRepository $temaRepository, private TemaFacade $temaFacade)
     {
-        $this->temaRepository = $temaRepository;
-        $this->temaFacade = $temaFacade;
     }
 
     public function index()
@@ -31,6 +29,7 @@ class TemasController extends Controller
     {
         try {
             $tema = $this->temaFacade->create($request->get('name'), $request->get('slugname'));
+            $this->temaRepository->flush();
             return response()->json(
                 ['data' =>
                     [

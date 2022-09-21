@@ -8,14 +8,11 @@ use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Questao\Facade\QuestaoFacade;
 use Illuminate\Http\Request;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class QuestoesController extends Controller
 {
-    public function __construct(QuestaoRepository $questaoRepository, QuestaoFacade $questaoFacade)
+    public function __construct(private QuestaoRepository $questaoRepository, private QuestaoFacade $questaoFacade)
     {
-        $this->questaoRepository = $questaoRepository;
-        $this->questaoFacade = $questaoFacade;
     }
 
     public function index()
@@ -44,6 +41,7 @@ class QuestoesController extends Controller
     {
         try {
             $questao = $this->questaoFacade->create($request->get('temaSlugname'), $request->get('pergunta'));
+            $this->questaoRepository->flush();
             return response()->json(
                 ['data' =>
                     [
@@ -64,7 +62,6 @@ class QuestoesController extends Controller
     public function listRepostas(Questao $questao, Request $request)
     {
         $respostas = $questao->getRespostas();
-
         $response = array_map(fn($resposta) => [
             'questao' => [
                 'id' => $resposta->getQuestao()->getId(),
@@ -81,8 +78,7 @@ class QuestoesController extends Controller
     {
         try {
             $questao = $this->questaoFacade->addAlternativa($questao, $request->get('resposta'), $request->get('isCorreta'));
-            EntityManager::persist($questao);
-            EntityManager::flush();
+            $this->questaoRepository->flush();
             $respostas = $questao->getRespostas();
             return response()->json(
                 ['data' =>
