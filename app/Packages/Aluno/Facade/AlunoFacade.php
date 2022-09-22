@@ -19,4 +19,9 @@ class AlunoFacade
         $this->alunoRepository->add($aluno);
         return $aluno;
     }
+
+    public function getAll()
+    {
+        return $this->alunoRepository->findAll();
+    }
 }

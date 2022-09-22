@@ -2,7 +2,6 @@
 
 namespace App\Packages\Tema\Facade;
 
-
 use App\Packages\Tema\Domain\Repository\TemaRepository;
 use App\Packages\Tema\Domain\Model\Tema;
 use Illuminate\Support\Str;
@@ -27,5 +26,10 @@ class TemaFacade
         if ($tema instanceof Tema) {
             throw new \Exception('O tema já existe.', 1663702757);
         }
+    }
+
+    public function getAll(): array
+    {
+        return $this->temaRepository->findAll();
     }
 }

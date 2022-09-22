@@ -1,7 +1,6 @@
 <?php
 
 Route::get('questoes','QuestoesController@index');
+Route::get('questoes/{questao}','QuestoesController@show');
 Route::post('questoes','QuestoesController@store');
-
-Route::get('questoes/{questao}','QuestoesController@listRepostas');
-Route::put('questoes/{questao}','QuestoesController@createRespostas');
+Route::put('questoes/{questao}','QuestoesController@createAlternativas');
