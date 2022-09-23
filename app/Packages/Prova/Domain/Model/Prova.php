@@ -163,8 +163,8 @@ class Prova
         return [$questoesProva, $questoesCorretas];
     }
 
-    private function calculaNotaProva(mixed $questoesCorretas, Collection $questoes): void
+    private function calculaNotaProva(int $questoesCorretas, Collection $questoes): void
     {
-        $this->nota = $questoesCorretas * (10 / $questoes->count());
+        $this->nota = round($questoesCorretas * (self::NOTA_MAXIMA / $questoes->count()),1);
     }
 }

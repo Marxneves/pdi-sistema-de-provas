@@ -2,7 +2,6 @@
 
 namespace App\Packages\Questao\Facade;
 
-
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Questao\Service\QuestaoService;

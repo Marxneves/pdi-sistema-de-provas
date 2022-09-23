@@ -3,13 +3,9 @@
 namespace App\Packages\Prova\Facade;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
-use App\Packages\Prova\Domain\Dto\RespostasProvaDto;
 use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Prova\Domain\Repository\ProvaRepository;
 use App\Packages\Prova\Service\ProvaService;
-use App\Packages\Questao\Domain\Repository\QuestaoRepository;
-use App\Packages\Tema\Domain\Repository\TemaRepository;
-use Illuminate\Support\Str;
 
 class ProvaFacade
 {
