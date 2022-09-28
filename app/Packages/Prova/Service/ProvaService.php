@@ -21,6 +21,7 @@ class ProvaService
         $tema = $this->temaRepository->findOneBySlugname($tema);
         $numeroAleatorio = rand(4, 20);
         $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorio);
+        $this->throwExceptionSeTemaNaoPossuirQuestoes($questoesCollection);
         $prova = new Prova(Str::uuid(), $aluno, $tema);
         $prova->setQuestoes($questoesCollection);
         return $prova;
@@ -42,6 +43,13 @@ class ProvaService
     {
         if ($prova->getStatus() === Prova::CONCLUIDA) {
             throw new \Exception('Prova já concluída.', 1663702741);
+        }
+    }
+
+    private function throwExceptionSeTemaNaoPossuirQuestoes(array $questoesCollection)
+    {
+        if (count($questoesCollection) === 0) {
+            throw new \Exception('Não possuem questões para esse tema.', 1664391636);
         }
     }
 }

@@ -61,7 +61,7 @@ class Questao
         return $this->pergunta;
     }
 
-    public function getAlternativas(): ?Collection
+    public function getAlternativas(): Collection|array|null
     {
         return $this->alternativas;
     }

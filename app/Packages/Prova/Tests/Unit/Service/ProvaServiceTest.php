@@ -5,6 +5,7 @@ namespace App\Packages\Prova\Tests\Unit\Service;
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Prova\Service\ProvaService;
+use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Tema\Domain\Model\Tema;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
@@ -13,6 +14,27 @@ use Tests\TestCase;
 class ProvaServiceTest extends TestCase
 {
     public function testIfCreateProva()
+    {
+        $alunoMock = $this->createMock(Aluno::class);
+        $temaMock = $this->createMock(Tema::class);
+        $questaoMock = $this->createMock(Questao::class);
+        $temaRepositoryMock = $this->createMock(TemaRepository::class);
+        $questaoRepositoryMock = $this->createMock(QuestaoRepository::class);
+
+        $temaRepositoryMock->method('findOneBySlugname')->willReturn($temaMock);
+        $questaoRepositoryMock->method('findRandomByTemaAndLimit')->willReturn([$questaoMock]);
+        $questaoMock->method('getAlternativas')->willReturn([]);
+
+        $this->app->bind(TemaRepository::class, fn() => $temaRepositoryMock);
+        $this->app->bind(QuestaoRepository::class, fn() => $questaoRepositoryMock);
+
+        /** @var ProvaService $provaService */
+        $provaService = app(ProvaService::class);
+        $prova = $provaService->create($alunoMock, 'tema-teste');
+        $this->assertInstanceOf(Prova::class, $prova);
+    }
+
+    public function testIfThrowExceptionQuandoNaoExisteQuestoesDeUmTema()
     {
         $alunoMock = $this->createMock(Aluno::class);
         $temaMock = $this->createMock(Tema::class);
@@ -25,10 +47,13 @@ class ProvaServiceTest extends TestCase
         $this->app->bind(TemaRepository::class, fn() => $temaRepositoryMock);
         $this->app->bind(QuestaoRepository::class, fn() => $questaoRepositoryMock);
 
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Não possuem questões para esse tema.');
+        $this->expectExceptionCode(1664391636);
+
         /** @var ProvaService $provaService */
         $provaService = app(ProvaService::class);
-        $prova = $provaService->create($alunoMock, 'tema-teste');
-        $this->assertInstanceOf(Prova::class, $prova);
+        $provaService->create($alunoMock, 'tema-teste');
     }
 
     public function testIfRespondeProva()
