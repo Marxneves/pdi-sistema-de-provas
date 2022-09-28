@@ -32,6 +32,7 @@ class QuestaoService
     public function addAlternativas(Questao $questao, array $alternativas): void
     {
         $this->throwExceptionSeJaExistirAlternativas($questao);
+        $this->throwExceptionSeNaoTiverQuatroAlternativas($alternativas);
         $alternativasCorretas = 0;
         foreach ($alternativas as $alternativa) {
             if($alternativa['isCorreta']) {
@@ -44,7 +45,7 @@ class QuestaoService
 
     private function throwExceptionSeJaExistirAlternativas(Questao $questao): void
     {
-        if ($questao->getRespostas()->count() > 0) {
+        if ($questao->getAlternativas()->count() > 0) {
             throw new \Exception('A questão já possui alternativas', 1663798294);
         }
     }
@@ -56,6 +57,13 @@ class QuestaoService
         }
         if ($alternativasCorretas > 1) {
             throw new \Exception('A questão só pode ter uma alternativa correta', 1663797428);
+        }
+    }
+
+    private function throwExceptionSeNaoTiverQuatroAlternativas(array $alternativas)
+    {
+        if (count($alternativas) !== 4) {
+            throw new \Exception('A questão deve ter quatro alternativas', 1664327303);
         }
     }
 }

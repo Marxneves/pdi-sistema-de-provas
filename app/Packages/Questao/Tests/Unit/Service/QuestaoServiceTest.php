@@ -45,10 +45,30 @@ class QuestaoServiceTest extends TestCase
         $alternativas = [
             ['resposta' => 'Resposta 1', 'isCorreta' => true],
             ['resposta' => 'Resposta 2', 'isCorreta' => false],
+            ['resposta' => 'Resposta 3', 'isCorreta' => false],
+            ['resposta' => 'Resposta 4', 'isCorreta' => false],
         ];
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
         self::assertSame('Resposta 1', $questao->getAlternativas()[0]->getAlternativa());
         self::assertTrue($questao->getAlternativas()[0]->isCorreta());
+    }
+
+    public function testIfThrowExceptionIfSeNaoTiverQuatroAlternativas()
+    {
+        $temaMock = $this->createMock(Tema::class);
+        $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
+
+        $alternativas = [
+            ['resposta' => 'Resposta 1', 'isCorreta' => true],
+            ['resposta' => 'Resposta 2', 'isCorreta' => false],
+            ['resposta' => 'Resposta 3', 'isCorreta' => false],
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('A questão deve ter quatro alternativas');
+        $this->expectExceptionCode(1664327303);
+
+        app(QuestaoService::class)->addAlternativas($questao, $alternativas);
     }
 
     public function testIfThrowExceptionIfJaExistiremAlternativas()
@@ -59,6 +79,8 @@ class QuestaoServiceTest extends TestCase
         $alternativas = [
             ['resposta' => 'Resposta 1', 'isCorreta' => true],
             ['resposta' => 'Resposta 2', 'isCorreta' => false],
+            ['resposta' => 'Resposta 3', 'isCorreta' => false],
+            ['resposta' => 'Resposta 4', 'isCorreta' => false],
         ];
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
 
@@ -76,6 +98,8 @@ class QuestaoServiceTest extends TestCase
                 'alternativas' => [
                     ['resposta' => 'Resposta 1', 'isCorreta' => false],
                     ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
                 ],
                 'exceptionMessage' => 'A questão deve ter uma alternativa correta',
                 'exceptionCode' => 1663702752
@@ -84,6 +108,8 @@ class QuestaoServiceTest extends TestCase
                 'alternativas' => [
                     ['resposta' => 'Resposta 1', 'isCorreta' => true],
                     ['resposta' => 'Resposta 2', 'isCorreta' => true],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
                 ],
                 'exceptionMessage' => 'A questão só pode ter uma alternativa correta',
                 'exceptionCode' => 1663797428

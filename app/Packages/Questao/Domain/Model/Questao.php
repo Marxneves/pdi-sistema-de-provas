@@ -61,11 +61,6 @@ class Questao
         return $this->pergunta;
     }
 
-    public function getRespostas(): ?Collection
-    {
-        return $this->alternativas;
-    }
-
     public function getAlternativas(): ?Collection
     {
         return $this->alternativas;

@@ -16,7 +16,7 @@ class QuestaoResponse
                 'id' => $resposta->getId(),
                 'resposta' => $resposta->getAlternativa(),
                 'correta' => $resposta->isCorreta(),
-            ], $questao->getRespostas()->toArray())
+            ], $questao->getAlternativas()->toArray())
         ];
     }
 
