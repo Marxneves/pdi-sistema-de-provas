@@ -7,8 +7,9 @@ use App\Http\Utilities\HttpStatusConstants;
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Questao\Facade\QuestaoFacade;
+use App\Packages\Questao\Request\AlternativaRequest;
+use App\Packages\Questao\Request\QuestaoRequest;
 use App\Packages\Questao\Response\QuestaoResponse;
-use Illuminate\Http\Request;
 
 class QuestoesController extends Controller
 {
@@ -31,7 +32,7 @@ class QuestoesController extends Controller
         return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::OK);
     }
 
-    public function store(Request $request)
+    public function store(QuestaoRequest $request)
     {
         try {
             $questao = $this->questaoFacade->create($request->get('temaSlugname'), $request->get('pergunta'));
@@ -42,7 +43,7 @@ class QuestoesController extends Controller
         }
     }
 
-    public function createAlternativas(Questao $questao, Request $request)
+    public function createAlternativas(Questao $questao, AlternativaRequest $request)
     {
         try {
             $questao = $this->questaoFacade->addAlternativas($questao, $request->get('alternativas'));

@@ -10,7 +10,7 @@ class AlunoFacadeTest extends TestCase
 {
     public function testIfCreateAluno()
     {
-        $alunoRepository = $this->createMock(AlunoRepository::class);
+        $alunoRepository = $this->createStub(AlunoRepository::class);
         $alunoRepository->expects($this->once())->method('add');
         $this->app->bind(AlunoRepository::class, fn() => $alunoRepository);
 

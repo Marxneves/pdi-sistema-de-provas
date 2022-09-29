@@ -15,24 +15,22 @@ class ProvaTest extends TestCase
 {
     public function testIfThrowExceptionProvaForaDoPrazo()
     {
-        $alunoMock = $this->createMock(Aluno::class);
-        $temaMock = $this->createMock(Tema::class);
+        $alunoMock = $this->createStub(Aluno::class);
+        $temaMock = $this->createStub(Tema::class);
         $prova = new Prova(Str::uuid(), $alunoMock, $temaMock);
         $prova->setCreatedAt(now());
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Prova enviada fora do tempo limite.');
-        $this->expectExceptionCode(1663470013);
+        $this->expectExceptionObject(new \Exception('Prova enviada fora do tempo limite.',1663470013));
 
-        Carbon::setTestNow(Carbon::now()->addHour());
+        Carbon::setTestNow(Carbon::now()->addHour()->addSecond());
         $prova->responder(collect());
     }
 
     public function testIfCalculaNota()
     {
-        $alunoMock = $this->createMock(Aluno::class);
-        $temaMock = $this->createMock(Tema::class);
-        $respostaProvaDtoMock = $this->createMock(RespostasProvaDto::class);
+        $alunoMock = $this->createStub(Aluno::class);
+        $temaMock = $this->createStub(Tema::class);
+        $respostaProvaDtoMock = $this->createStub(RespostasProvaDto::class);
 
         $prova = new Prova(Str::uuid(), $alunoMock, $temaMock);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da vez');

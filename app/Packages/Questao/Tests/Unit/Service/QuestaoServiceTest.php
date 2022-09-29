@@ -14,8 +14,8 @@ class QuestaoServiceTest extends TestCase
 
     public function testIfCreateQuestao()
     {
-        $temaMock = $this->createMock(Tema::class);
-        $temaRepository = $this->createMock(TemaRepository::class);
+        $temaMock = $this->createStub(Tema::class);
+        $temaRepository = $this->createStub(TemaRepository::class);
         $temaRepository->expects($this->once())->method('findOneBySlugname')->willReturn($temaMock);
         $this->app->bind(TemaRepository::class, fn() => $temaRepository);
 
@@ -26,20 +26,18 @@ class QuestaoServiceTest extends TestCase
 
     public function testIfThrowExceptionWhenTemaNaoExistir()
     {
-        $temaRepository = $this->createMock(TemaRepository::class);
+        $temaRepository = $this->createStub(TemaRepository::class);
         $temaRepository->expects($this->once())->method('findOneBySlugname');;
         $this->app->bind(TemaRepository::class, fn() => $temaRepository);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('O tema da questão não existe');
-        $this->expectExceptionCode(1663702752);
+        $this->expectExceptionObject(new \Exception('O tema da questão não existe', 1663702752));
 
         app(QuestaoService::class)->create('tema_slugname','Pergunta da questao?');
     }
 
     public function testIfAddAlternativa()
     {
-        $temaMock = $this->createMock(Tema::class);
+        $temaMock = $this->createStub(Tema::class);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
@@ -55,7 +53,7 @@ class QuestaoServiceTest extends TestCase
 
     public function testIfThrowExceptionIfSeNaoTiverQuatroAlternativas()
     {
-        $temaMock = $this->createMock(Tema::class);
+        $temaMock = $this->createStub(Tema::class);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
@@ -64,16 +62,14 @@ class QuestaoServiceTest extends TestCase
             ['resposta' => 'Resposta 3', 'isCorreta' => false],
         ];
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('A questão deve ter quatro alternativas');
-        $this->expectExceptionCode(1664327303);
+        $this->expectExceptionObject(new \Exception('A questão deve ter quatro alternativas', 1664327303));
 
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
     }
 
     public function testIfThrowExceptionIfJaExistiremAlternativas()
     {
-        $temaMock = $this->createMock(Tema::class);
+        $temaMock = $this->createStub(Tema::class);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
@@ -84,9 +80,7 @@ class QuestaoServiceTest extends TestCase
         ];
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('A questão já possui alternativas');
-        $this->expectExceptionCode(1663798294);
+        $this->expectExceptionObject(new \Exception('A questão já possui alternativas', 1663798294));
 
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
     }
@@ -120,12 +114,10 @@ class QuestaoServiceTest extends TestCase
     /** @dataProvider exceptionProvider */
     public function testIfThrowExceptionQuandoNaoTemSomenteUmaAlternativaCorreta(array $alternativas, string $exceptionMessage, int $exceptionCode)
     {
-        $temaMock = $this->createMock(Tema::class);
+        $temaMock = $this->createStub(Tema::class);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage($exceptionMessage);
-        $this->expectExceptionCode($exceptionCode);
+        $this->expectExceptionObject(new \Exception($exceptionMessage, $exceptionCode));
 
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
     }

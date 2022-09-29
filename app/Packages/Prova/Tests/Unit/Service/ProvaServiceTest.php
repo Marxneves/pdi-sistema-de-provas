@@ -15,11 +15,11 @@ class ProvaServiceTest extends TestCase
 {
     public function testIfCreateProva()
     {
-        $alunoMock = $this->createMock(Aluno::class);
-        $temaMock = $this->createMock(Tema::class);
-        $questaoMock = $this->createMock(Questao::class);
-        $temaRepositoryMock = $this->createMock(TemaRepository::class);
-        $questaoRepositoryMock = $this->createMock(QuestaoRepository::class);
+        $alunoMock = $this->createStub(Aluno::class);
+        $temaMock = $this->createStub(Tema::class);
+        $questaoMock = $this->createStub(Questao::class);
+        $temaRepositoryMock = $this->createStub(TemaRepository::class);
+        $questaoRepositoryMock = $this->createStub(QuestaoRepository::class);
 
         $temaRepositoryMock->method('findOneBySlugname')->willReturn($temaMock);
         $questaoRepositoryMock->method('findRandomByTemaAndLimit')->willReturn([$questaoMock]);
@@ -34,12 +34,27 @@ class ProvaServiceTest extends TestCase
         $this->assertInstanceOf(Prova::class, $prova);
     }
 
+    public function testIfThrowExceptionQuandoTemaNaoExistir()
+    {
+        $alunoMock = $this->createStub(Aluno::class);
+        $temaRepositoryMock = $this->createStub(TemaRepository::class);
+        $temaRepositoryMock->method('findOneBySlugname')->willReturn(null);
+
+        $this->app->bind(TemaRepository::class, fn() => $temaRepositoryMock);
+
+        $this->expectExceptionObject(new \Exception('O tema não existe.', 1663702757));
+
+        /** @var ProvaService $provaService */
+        $provaService = app(ProvaService::class);
+        $provaService->create($alunoMock, 'tema-teste');
+    }
+
     public function testIfThrowExceptionQuandoNaoExisteQuestoesDeUmTema()
     {
-        $alunoMock = $this->createMock(Aluno::class);
-        $temaMock = $this->createMock(Tema::class);
-        $temaRepositoryMock = $this->createMock(TemaRepository::class);
-        $questaoRepositoryMock = $this->createMock(QuestaoRepository::class);
+        $alunoMock = $this->createStub(Aluno::class);
+        $temaMock = $this->createStub(Tema::class);
+        $temaRepositoryMock = $this->createStub(TemaRepository::class);
+        $questaoRepositoryMock = $this->createStub(QuestaoRepository::class);
 
         $temaRepositoryMock->method('findOneBySlugname')->willReturn($temaMock);
         $questaoRepositoryMock->method('findRandomByTemaAndLimit')->willReturn([]);
@@ -47,9 +62,7 @@ class ProvaServiceTest extends TestCase
         $this->app->bind(TemaRepository::class, fn() => $temaRepositoryMock);
         $this->app->bind(QuestaoRepository::class, fn() => $questaoRepositoryMock);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Não possuem questões para esse tema.');
-        $this->expectExceptionCode(1664391636);
+        $this->expectExceptionObject(new \Exception('Não possuem questões para esse tema.', 1664391636));
 
         /** @var ProvaService $provaService */
         $provaService = app(ProvaService::class);
@@ -58,7 +71,7 @@ class ProvaServiceTest extends TestCase
 
     public function testIfRespondeProva()
     {
-        $provaMock = $this->createMock(Prova::class);
+        $provaMock = $this->createStub(Prova::class);
 
         $provaMock->method('getStatus')->willReturn(Prova::ABERTA);
 
@@ -70,12 +83,10 @@ class ProvaServiceTest extends TestCase
 
     public function testIfThrowExceptionProvaConcluida()
     {
-        $provaMock = $this->createMock(Prova::class);
+        $provaMock = $this->createStub(Prova::class);
         $provaMock->method('getStatus')->willReturn(Prova::CONCLUIDA);
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Prova já concluída.');
-        $this->expectExceptionCode(1663702741);
+        $this->expectExceptionObject(new \Exception('Prova já concluída.', 1663702741));
 
         /** @var ProvaService $provaService */
         $provaService = app(ProvaService::class);

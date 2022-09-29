@@ -16,9 +16,6 @@ class AlunoResponse
     }
     public static function collection(array $alunos): array
     {
-        return array_map(fn($aluno) => [
-            'id' => $aluno->getId(),
-            'nome' => $aluno->getNome(),
-        ], $alunos);
+        return array_map(fn($aluno) => self::item($aluno), $alunos);
     }
 }

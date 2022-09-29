@@ -8,8 +8,9 @@ use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Prova\Domain\Repository\ProvaRepository;
 use App\Packages\Prova\Facade\ProvaFacade;
+use App\Packages\Prova\Request\EnviarProvaRequest;
+use App\Packages\Prova\Request\ProvaRequest;
 use App\Packages\Prova\Response\ProvaResponse;
-use Illuminate\Http\Request;
 
 class ProvaController extends Controller
 {
@@ -32,7 +33,7 @@ class ProvaController extends Controller
         return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::OK);
     }
 
-    public function store(Aluno $aluno, Request $request)
+    public function store(Aluno $aluno, ProvaRequest $request)
     {
         try {
             $prova = $this->provaFacade->create($aluno, $request->get('tema'));
@@ -43,7 +44,7 @@ class ProvaController extends Controller
         }
     }
 
-    public function enviarRepostas(Prova $prova, Request $request)
+    public function enviarRepostas(Prova $prova, EnviarProvaRequest $request)
     {
         try {
             $prova = $this->provaFacade->responder($prova, $request->get('respostas'));

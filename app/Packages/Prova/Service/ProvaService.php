@@ -7,6 +7,7 @@ use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Dto\RespostasProvaDto;
 use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
+use App\Packages\Tema\Domain\Model\Tema;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
 use Illuminate\Support\Str;
 
@@ -19,6 +20,7 @@ class ProvaService
     public function create(Aluno $aluno, string $tema): Prova
     {
         $tema = $this->temaRepository->findOneBySlugname($tema);
+        $this->throwExceptionSeTemaNaoExistir($tema);
         $numeroAleatorio = rand(4, 20);
         $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorio);
         $this->throwExceptionSeTemaNaoPossuirQuestoes($questoesCollection);
@@ -39,6 +41,13 @@ class ProvaService
         return $prova;
     }
 
+    private function throwExceptionSeTemaNaoExistir(?Tema $tema): void
+    {
+        if (!$tema instanceof Tema) {
+            throw new \Exception('O tema não existe.', 1663702757);
+        }
+    }
+
     private function throwExceptionSeProvaConcluida(Prova $prova): void
     {
         if ($prova->getStatus() === Prova::CONCLUIDA) {
@@ -46,7 +55,7 @@ class ProvaService
         }
     }
 
-    private function throwExceptionSeTemaNaoPossuirQuestoes(array $questoesCollection)
+    private function throwExceptionSeTemaNaoPossuirQuestoes(array $questoesCollection): void
     {
         if (count($questoesCollection) === 0) {
             throw new \Exception('Não possuem questões para esse tema.', 1664391636);

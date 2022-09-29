@@ -3,29 +3,19 @@
 namespace App\Packages\Tema\Facade;
 
 use App\Packages\Tema\Domain\Repository\TemaRepository;
-use App\Packages\Tema\Domain\Model\Tema;
-use Illuminate\Support\Str;
+use App\Packages\Tema\Service\TemaService;
 
 class TemaFacade
 {
-    public function __construct(private TemaRepository $temaRepository)
+    public function __construct(private TemaRepository $temaRepository, private TemaService $temaService)
     {
     }
 
-    public function create(string $name, string $slugname)
+    public function create(string $nome, string $slugname)
     {
-        $tema = $this->temaRepository->findOneBySlugname($slugname);
-        $this->throwExceptionSeTemaJaExistir($tema);
-        $tema = new Tema(Str::uuid(), $name, $slugname);
+        $tema = $this->temaService->create($nome, $slugname);
         $this->temaRepository->add($tema);
         return $tema;
-    }
-
-    public function throwExceptionSeTemaJaExistir(?Tema $tema): void
-    {
-        if ($tema instanceof Tema) {
-            throw new \Exception('O tema já existe.', 1663702757);
-        }
     }
 
     public function getAll(): array

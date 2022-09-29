@@ -7,9 +7,9 @@ use App\Http\Utilities\HttpStatusConstants;
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Aluno\Domain\Repository\AlunoRepository;
 use App\Packages\Aluno\Facade\AlunoFacade;
+use App\Packages\Aluno\Request\AlunoRequest;
 use App\Packages\Aluno\Response\AlunoResponse;
 use App\Packages\Prova\Response\ProvaResponse;
-use Illuminate\Http\Request;
 
 class AlunoController extends Controller
 {
@@ -27,7 +27,7 @@ class AlunoController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(AlunoRequest $request)
     {
         try {
             $aluno = $this->alunoFacade->create($request->get('nome'));

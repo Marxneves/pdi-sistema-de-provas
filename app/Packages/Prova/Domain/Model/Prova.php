@@ -6,13 +6,13 @@ use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Dto\RespostasProvaDto;
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Tema\Domain\Model\Tema;
+use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Illuminate\Support\Collection as IlluminateCollection;
 use Illuminate\Support\Str;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 
 /**
  * @ORM\Entity
@@ -25,6 +25,7 @@ class Prova
     const NOTA_MAXIMA = 10;
     const CONCLUIDA = 'Concluida';
     const ABERTA = 'Aberta';
+    const HORA_EM_SEGUNDOS = 3600;
 
     /**
      * @ORM\OneToMany (targetEntity="QuestaoProva", mappedBy="prova", cascade={"all"})
@@ -124,7 +125,8 @@ class Prova
 
     private function throwExceptionIfProvaForaDoPrazo(): void
     {
-        if ($this->submetidaEm->diff($this->createdAt)->h >= 1) {
+        $submetidaEm = Carbon::instance($this->submetidaEm);
+        if ($submetidaEm->diffInSeconds($this->createdAt) > self::HORA_EM_SEGUNDOS) {
             $this->nota = 0;
             throw new \Exception('Prova enviada fora do tempo limite.', 1663470013);
         }
