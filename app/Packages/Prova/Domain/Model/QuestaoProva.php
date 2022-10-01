@@ -22,7 +22,7 @@ class QuestaoProva
     private ?Collection $alternativas;
 
     /** @ORM\Column(type="string") */
-    private string $respostaCorreta;
+    private ?string $respostaCorreta;
 
     public function __construct(
         /**
@@ -49,7 +49,7 @@ class QuestaoProva
     )
     {
         $this->alternativas = new ArrayCollection;
-        $this->respostaCorreta = '';
+        $this->respostaCorreta = null;
     }
 
     public function getId(): string
@@ -65,11 +65,6 @@ class QuestaoProva
     public function getAlternativas(): ?Collection
     {
         return $this->alternativas;
-    }
-
-    public function addAlternativa($resposta, $isCorreta): void
-    {
-        $this->alternativas->add(new AlternativaProva(Str::uuid(), $this, $resposta, $isCorreta));
     }
 
     public function setAlternativas($alternativas)
@@ -92,7 +87,7 @@ class QuestaoProva
         $this->respostaAluno = $respostaAluno;
     }
 
-    public function getRespostaCorreta(): string
+    public function getRespostaCorreta(): ?string
     {
         return $this->respostaCorreta;
     }

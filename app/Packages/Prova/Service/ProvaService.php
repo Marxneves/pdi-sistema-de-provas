@@ -21,8 +21,8 @@ class ProvaService
     {
         $tema = $this->temaRepository->findOneBySlugname($tema);
         $this->throwExceptionSeTemaNaoExistir($tema);
-        $numeroAleatorio = rand(4, 20);
-        $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorio);
+        $numeroAleatorioDeQuestoes = rand(4, 20);
+        $questoesCollection = $this->questaoRepository->findRandomByTemaAndLimit($tema, $numeroAleatorioDeQuestoes);
         $this->throwExceptionSeTemaNaoPossuirQuestoes($questoesCollection);
         $prova = new Prova(Str::uuid(), $aluno, $tema);
         $prova->setQuestoes($questoesCollection);
@@ -34,9 +34,12 @@ class ProvaService
         $this->throwExceptionSeProvaConcluida($prova);
 
         $repostasDtoCollection = collect();
+        sort($respostas);
+
         foreach ($respostas as $resposta) {
             $repostasDtoCollection->add(new RespostasProvaDto($resposta['questaoId'], $resposta['respostaAluno']));
         }
+
         $prova->responder($repostasDtoCollection);
         return $prova;
     }

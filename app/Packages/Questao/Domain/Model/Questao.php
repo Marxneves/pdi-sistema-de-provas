@@ -66,8 +66,25 @@ class Questao
         return $this->alternativas;
     }
 
-    public function addAlternativa($resposta, $isCorreta): void
+    public function setAlternativas(array $alternativas)
     {
-        $this->alternativas->add(new Alternativa(Str::uuid(), $this, $resposta, $isCorreta));
+        $alternativasCorretas = 0;
+        foreach ($alternativas as $alternativa) {
+            if($alternativa['isCorreta']) {
+                $alternativasCorretas++;
+            }
+            $this->alternativas->add(new Alternativa(Str::uuid(), $this, $alternativa['resposta'], $alternativa['isCorreta']));
+        }
+        $this->throwExceptionSeNaoExistirSomenteUmaAlternativaCorreta($alternativasCorretas);
+    }
+
+    private function throwExceptionSeNaoExistirSomenteUmaAlternativaCorreta(int $alternativasCorretas): void
+    {
+        if ($alternativasCorretas === 0) {
+            throw new \Exception('A questão deve ter uma alternativa correta', 1663702752);
+        }
+        if ($alternativasCorretas > 1) {
+            throw new \Exception('A questão só pode ter uma alternativa correta', 1663797428);
+        }
     }
 }

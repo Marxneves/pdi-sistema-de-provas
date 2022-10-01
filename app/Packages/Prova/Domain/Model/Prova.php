@@ -5,6 +5,7 @@ namespace App\Packages\Prova\Domain\Model;
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Dto\RespostasProvaDto;
 use App\Packages\Questao\Domain\Model\Questao;
+use App\Packages\Questao\Response\QuestaoResponse;
 use App\Packages\Tema\Domain\Model\Tema;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -29,6 +30,7 @@ class Prova
 
     /**
      * @ORM\OneToMany (targetEntity="QuestaoProva", mappedBy="prova", cascade={"all"})
+     * @ORM\OrderBy({"id" = "ASC"})
      */
     private Collection $questoes;
 
@@ -74,7 +76,7 @@ class Prova
     {
         foreach ($questoesCollection as $questao) {
             /** @var Questao $questao */
-            $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
+            $questaoProva = new QuestaoProva($questao->getId(), $this, $questao->getPergunta());
             $questaoProva->setAlternativas($questao->getAlternativas());
             $this->questoes->add($questaoProva);
         }
@@ -135,19 +137,16 @@ class Prova
     private function verificaESetaRespostasCorretasDoAluno(IlluminateCollection $respostas, int $questoesCorretas): int
     {
         $questoesProva = $this->questoes;
-        foreach ($questoesProva as $questaoProva) {
+
+        foreach ($questoesProva as $key => $questaoProva) {
             /** @var QuestaoProva $questaoProva */
-            foreach ($respostas as $resposta) {
-                if ($questaoProva->getId() === $resposta->getQuestaoId()) {
-                    $questaoProva->setRespostaAluno($resposta->getRespostaAluno());
-                    $this->somaSeRespostaAlunoForCorreta($questaoProva, $resposta, $questoesCorretas);
-                }
-            }
+            $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
+            $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
         }
         return $questoesCorretas;
     }
 
-    public function somaSeRespostaAlunoForCorreta(QuestaoProva $questaoProva, RespostasProvaDto $resposta, int &$questoesCorretas): void
+    private function somaSeRespostaAlunoForCorreta(QuestaoProva $questaoProva, RespostasProvaDto $resposta, int &$questoesCorretas): void
     {
         if ($questaoProva->getRespostaCorreta() === $resposta->getRespostaAluno()) {
             $questoesCorretas += 1;
