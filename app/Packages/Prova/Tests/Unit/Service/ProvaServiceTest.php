@@ -152,7 +152,7 @@ class ProvaServiceTest extends TestCase
             ],
             [
                 'questaoId' => $prova->getQuestoes()[0]->getId(),
-                'respostaAluno' => 'JAVA',
+                'respostaAluno' => 'Java',
             ],
             [
                 'questaoId' => $prova->getQuestoes()[3]->getId(),

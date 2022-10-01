@@ -51,7 +51,7 @@ class QuestaoServiceTest extends TestCase
         self::assertTrue($questao->getAlternativas()[0]->isCorreta());
     }
 
-    public function testIfThrowExceptionIfSeNaoTiverQuatroAlternativas()
+    public function testIfThrowExceptionSeNaoTiverQuatroAlternativas()
     {
         $temaMock = $this->createStub(Tema::class);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
@@ -81,43 +81,6 @@ class QuestaoServiceTest extends TestCase
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
 
         $this->expectExceptionObject(new \Exception('A questão já possui alternativas', 1663798294));
-
-        app(QuestaoService::class)->addAlternativas($questao, $alternativas);
-    }
-
-    public function exceptionProvider(): array
-    {
-        return [
-            'Nenhuma Alternativa correta' => [
-                'alternativas' => [
-                    ['resposta' => 'Resposta 1', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                ],
-                'exceptionMessage' => 'A questão deve ter uma alternativa correta',
-                'exceptionCode' => 1663702752
-            ],
-            'Mais que uma alternativa correta' => [
-                'alternativas' => [
-                    ['resposta' => 'Resposta 1', 'isCorreta' => true],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => true],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                ],
-                'exceptionMessage' => 'A questão só pode ter uma alternativa correta',
-                'exceptionCode' => 1663797428
-            ],
-        ];
-    }
-
-    /** @dataProvider exceptionProvider */
-    public function testIfThrowExceptionQuandoNaoTemSomenteUmaAlternativaCorreta(array $alternativas, string $exceptionMessage, int $exceptionCode)
-    {
-        $temaMock = $this->createStub(Tema::class);
-        $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
-
-        $this->expectExceptionObject(new \Exception($exceptionMessage, $exceptionCode));
 
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
     }
