@@ -14,20 +14,20 @@ class QuestaoTest extends TestCase
         return [
             'Nenhuma Alternativa correta' => [
                 'alternativas' => [
-                    ['resposta' => 'Resposta 1', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 1', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => false],
                 ],
                 'exceptionMessage' => 'A questão deve ter uma alternativa correta',
                 'exceptionCode' => 1663702752
             ],
             'Mais que uma alternativa correta' => [
                 'alternativas' => [
-                    ['resposta' => 'Resposta 1', 'isCorreta' => true],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => true],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
-                    ['resposta' => 'Resposta 2', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 1', 'isCorreta' => true],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => true],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+                    ['alternativa' => 'Resposta 2', 'isCorreta' => false],
                 ],
                 'exceptionMessage' => 'A questão só pode ter uma alternativa correta',
                 'exceptionCode' => 1663797428

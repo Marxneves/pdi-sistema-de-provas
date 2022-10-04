@@ -33,14 +33,14 @@ class ProvaService
     {
         $this->throwExceptionSeProvaConcluida($prova);
 
-        $repostasDtoCollection = collect();
+        $respostasDtoCollection = collect();
         sort($respostas);
 
         foreach ($respostas as $resposta) {
-            $repostasDtoCollection->add(new RespostasProvaDto($resposta['questaoId'], $resposta['respostaAluno']));
+            $respostasDtoCollection->add(new RespostasProvaDto($resposta['questaoId'], $resposta['respostaAluno']));
         }
 
-        $prova->responder($repostasDtoCollection);
+        $prova->responder($respostasDtoCollection);
         return $prova;
     }
 

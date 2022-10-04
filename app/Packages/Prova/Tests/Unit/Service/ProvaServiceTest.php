@@ -109,34 +109,34 @@ class ProvaServiceTest extends TestCase
         $temaMock = $this->createStub(Tema::class);
         $questaoUm = new Questao('0983421b-03f6-4fc2-b034-6f926fe8f305', $temaMock, 'Qual a melhor linguagem de programação?');
         $questaoUm->setAlternativas([
-            ['resposta' => 'PHP', 'isCorreta' => true],
-            ['resposta' => 'Java', 'isCorreta' => false],
-            ['resposta' => 'C#', 'isCorreta' => false],
-            ['resposta' => 'Python', 'isCorreta' => false],
+            ['alternativa' => 'PHP', 'isCorreta' => true],
+            ['alternativa' => 'Java', 'isCorreta' => false],
+            ['alternativa' => 'C#', 'isCorreta' => false],
+            ['alternativa' => 'Python', 'isCorreta' => false],
         ]);
 
         $questaoDois = new Questao('37b8d645-d663-4044-9ba4-ed4cda86ca80', $temaMock, 'Qual a pior linguagem de programação?');
         $questaoDois->setAlternativas([
-            ['resposta' => 'PHP', 'isCorreta' => false],
-            ['resposta' => 'Java', 'isCorreta' => true],
-            ['resposta' => 'C#', 'isCorreta' => false],
-            ['resposta' => 'Python', 'isCorreta' => false],
+            ['alternativa' => 'PHP', 'isCorreta' => false],
+            ['alternativa' => 'Java', 'isCorreta' => true],
+            ['alternativa' => 'C#', 'isCorreta' => false],
+            ['alternativa' => 'Python', 'isCorreta' => false],
         ]);
 
         $questaoTres = new Questao('4aea10e8-0bc6-4dd8-9faa-ea2b312c1d5f', $temaMock, 'Qual a linguagem de programação mais usada?');
         $questaoTres->setAlternativas([
-            ['resposta' => 'PHP', 'isCorreta' => true],
-            ['resposta' => 'Java', 'isCorreta' => false],
-            ['resposta' => 'C#', 'isCorreta' => false],
-            ['resposta' => 'Python', 'isCorreta' => false],
+            ['alternativa' => 'PHP', 'isCorreta' => true],
+            ['alternativa' => 'Java', 'isCorreta' => false],
+            ['alternativa' => 'C#', 'isCorreta' => false],
+            ['alternativa' => 'Python', 'isCorreta' => false],
         ]);
 
         $questaoQuatro = new Questao('a87c5ee8-2a2d-4540-8d1d-8cdc08d489ec', $temaMock, 'Qual a linguagem de programação menos usada?');
         $questaoQuatro->setAlternativas([
-            ['resposta' => 'PHP', 'isCorreta' => false],
-            ['resposta' => 'Java', 'isCorreta' => false],
-            ['resposta' => 'C#', 'isCorreta' => true],
-            ['resposta' => 'Python', 'isCorreta' => false],
+            ['alternativa' => 'PHP', 'isCorreta' => false],
+            ['alternativa' => 'Java', 'isCorreta' => false],
+            ['alternativa' => 'C#', 'isCorreta' => true],
+            ['alternativa' => 'Python', 'isCorreta' => false],
         ]);
 
         $questoesArray = [$questaoUm, $questaoDois, $questaoTres, $questaoQuatro];

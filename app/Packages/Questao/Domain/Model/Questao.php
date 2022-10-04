@@ -73,7 +73,7 @@ class Questao
             if($alternativa['isCorreta']) {
                 $alternativasCorretas++;
             }
-            $this->alternativas->add(new Alternativa(Str::uuid(), $this, $alternativa['resposta'], $alternativa['isCorreta']));
+            $this->alternativas->add(new Alternativa(Str::uuid(), $this, $alternativa['alternativa'], $alternativa['isCorreta']));
         }
         $this->throwExceptionSeNaoExistirSomenteUmaAlternativaCorreta($alternativasCorretas);
     }

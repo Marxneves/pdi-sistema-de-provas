@@ -10,7 +10,7 @@ class AlternativaRequest extends FormRequest
     {
         return [
             'alternativas' => 'required|array',
-            'alternativas.*.resposta' => 'required|string',
+            'alternativas.*.alternativa' => 'required|string',
             'alternativas.*.isCorreta' => 'required|boolean',
         ];
     }
@@ -20,8 +20,8 @@ class AlternativaRequest extends FormRequest
         return [
             'alternativas.required' => 'O campo alternativas é obrigatório',
             'alternativas.array' => 'O campo alternativas deve ser um array',
-            'alternativas.*.resposta.required' => 'O campo resposta é obrigatório',
-            'alternativas.*.resposta.string' => 'O campo resposta deve ser uma string',
+            'alternativas.*.alternativa.required' => 'O campo alternativa é obrigatório',
+            'alternativas.*.alternativa.string' => 'O campo alternativa deve ser uma string',
             'alternativas.*.isCorreta.required' => 'O campo isCorreta é obrigatório',
             'alternativas.*.isCorreta.boolean' => 'O campo isCorreta deve ser um boolean',
         ];

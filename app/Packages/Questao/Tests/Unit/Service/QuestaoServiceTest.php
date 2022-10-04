@@ -41,10 +41,10 @@ class QuestaoServiceTest extends TestCase
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
-            ['resposta' => 'Resposta 1', 'isCorreta' => true],
-            ['resposta' => 'Resposta 2', 'isCorreta' => false],
-            ['resposta' => 'Resposta 3', 'isCorreta' => false],
-            ['resposta' => 'Resposta 4', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 1', 'isCorreta' => true],
+            ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 3', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 4', 'isCorreta' => false],
         ];
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
         self::assertSame('Resposta 1', $questao->getAlternativas()[0]->getAlternativa());
@@ -57,9 +57,9 @@ class QuestaoServiceTest extends TestCase
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
-            ['resposta' => 'Resposta 1', 'isCorreta' => true],
-            ['resposta' => 'Resposta 2', 'isCorreta' => false],
-            ['resposta' => 'Resposta 3', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 1', 'isCorreta' => true],
+            ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 3', 'isCorreta' => false],
         ];
 
         $this->expectExceptionObject(new \Exception('A questão deve ter quatro alternativas', 1664327303));
@@ -73,10 +73,10 @@ class QuestaoServiceTest extends TestCase
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da questao?');
 
         $alternativas = [
-            ['resposta' => 'Resposta 1', 'isCorreta' => true],
-            ['resposta' => 'Resposta 2', 'isCorreta' => false],
-            ['resposta' => 'Resposta 3', 'isCorreta' => false],
-            ['resposta' => 'Resposta 4', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 1', 'isCorreta' => true],
+            ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 3', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 4', 'isCorreta' => false],
         ];
         app(QuestaoService::class)->addAlternativas($questao, $alternativas);
 

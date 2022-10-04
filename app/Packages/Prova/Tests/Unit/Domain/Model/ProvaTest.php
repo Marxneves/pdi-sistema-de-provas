@@ -35,10 +35,10 @@ class ProvaTest extends TestCase
         $prova = new Prova(Str::uuid(), $alunoMock, $temaMock);
         $questao = new Questao(Str::uuid(), $temaMock, 'Pergunta da vez');
         $alternativas = [
-            ['resposta' => 'Resposta Correta', 'isCorreta' => true],
-            ['resposta' => 'Resposta 2', 'isCorreta' => false],
-            ['resposta' => 'Resposta 3', 'isCorreta' => false],
-            ['resposta' => 'Resposta 4', 'isCorreta' => false],
+            ['alternativa' => 'Resposta Correta', 'isCorreta' => true],
+            ['alternativa' => 'Resposta 2', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 3', 'isCorreta' => false],
+            ['alternativa' => 'Resposta 4', 'isCorreta' => false],
         ];
         $questao->setAlternativas($alternativas);
 

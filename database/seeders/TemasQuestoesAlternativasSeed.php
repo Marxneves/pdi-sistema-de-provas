@@ -18,10 +18,8 @@ class TemasQuestoesAlternativasSeed extends Seeder
         EntityManager::persist($tema);
         foreach ($seeds['questoes'] as $questao) {
             $questaoEntity = new Questao(Str::uuid(),$tema, $questao['pergunta']);
+            $questaoEntity->setAlternativas($questao['alternativas']);
             EntityManager::persist($questaoEntity);
-            foreach ($questao['alternativas'] as $alternativa) {
-                $questaoEntity->addAlternativa($alternativa['alternativa'], $alternativa['correta']);
-            }
         }
         EntityManager::flush();
     }

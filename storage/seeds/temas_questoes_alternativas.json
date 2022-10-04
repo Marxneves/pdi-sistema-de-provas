@@ -9,19 +9,19 @@
       "alternativas": [
         {
           "alternativa": "Java",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "C#",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "PHP",
-          "correta": true
+          "isCorreta": true
         },
         {
           "alternativa": "Python",
-          "correta": false
+          "isCorreta": false
         }
       ]
     },
@@ -30,19 +30,19 @@
       "alternativas": [
         {
           "alternativa": "Java",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "C#",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "PHP",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Python",
-          "correta": true
+          "isCorreta": true
         }
       ]
     },
@@ -51,19 +51,19 @@
       "alternativas": [
         {
           "alternativa": "Java",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "C#",
-          "correta": true
+          "isCorreta": true
         },
         {
           "alternativa": "PHP",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Python",
-          "correta": false
+          "isCorreta": false
         }
       ]
     },
@@ -72,19 +72,19 @@
       "alternativas": [
         {
           "alternativa": "Java",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "C#",
-          "correta": true
+          "isCorreta": true
         },
         {
           "alternativa": "PHP",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Python",
-          "correta": false
+          "isCorreta": false
         }
       ]
     },
@@ -93,19 +93,19 @@
       "alternativas": [
         {
           "alternativa": "Java",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "JavaScript",
-          "correta": true
+          "isCorreta": true
         },
         {
           "alternativa": "PHP",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Python",
-          "correta": false
+          "isCorreta": false
         }
       ]
     },
@@ -114,19 +114,19 @@
       "alternativas": [
         {
           "alternativa": "Vue.JS",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Angule.JS",
-          "correta": true
+          "isCorreta": true
         },
         {
           "alternativa": "React.JS",
-          "correta": false
+          "isCorreta": false
         },
         {
           "alternativa": "Angular",
-          "correta": false
+          "isCorreta": false
         }
       ]
     }
