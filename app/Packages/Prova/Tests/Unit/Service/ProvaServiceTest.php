@@ -4,12 +4,14 @@ namespace App\Packages\Prova\Tests\Unit\Service;
 
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Model\Prova;
+use App\Packages\Prova\Factory\ProvaFactory;
 use App\Packages\Prova\Service\ProvaService;
 use App\Packages\Questao\Domain\Model\Questao;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Tema\Domain\Model\Tema;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
 use Illuminate\Support\Str;
+use LaravelDoctrine\ORM\Facades\EntityManager;
 use Tests\TestCase;
 
 class ProvaServiceTest extends TestCase
@@ -72,15 +74,14 @@ class ProvaServiceTest extends TestCase
 
     public function testIfRespondeProva()
     {
-        $prova = $this->createProvaForTest();
-        $respostas = $this->getRespostasAlunoForaDeOrdemForTest($prova);
-
+        $prova = $this->createProvaForTeste();
+        $respostas = $this->getRespostasAlunoForTest($prova);
         /** @var ProvaService $provaService */
         $provaService = app(ProvaService::class);
-        $prova = $provaService->responder($prova, $respostas);
+        $provaCorreta = $provaService->responder($prova, $respostas);
 
-        $this->assertSame(5.0, $prova->getNota());
-        $this->assertSame(Prova::CONCLUIDA, $prova->getStatus());
+        $this->assertSame(10.0, $provaCorreta->getNota());
+        $this->assertSame(Prova::CONCLUIDA, $provaCorreta->getStatus());
     }
 
     public function testIfThrowExceptionProvaConcluida()
@@ -95,73 +96,42 @@ class ProvaServiceTest extends TestCase
         $provaService->responder($provaMock, []);
     }
 
-    private function createProvaForTest(): Prova
+    public function testIfThrowExceptionQuandoQuantidadeRespostasDiferenteQuantidadePerguntas()
     {
-        $temaMock = $this->createStub(Tema::class);
-        $prova = new Prova(Str::uuid(), $this->createStub(Aluno::class), $temaMock);
-        $questoesArray = $this->createQuestoesForTest();
-        $prova->setQuestoes($questoesArray);
-        return $prova;
+        $prova = $this->createProvaForTeste();
+        $respostas = [];
+
+        $this->expectExceptionObject(new \Exception('Quantidade de respostas diferente da quantidade de perguntas.', 1664697689));
+
+        /** @var ProvaService $provaService */
+        $provaService = app(ProvaService::class);
+        $provaService->responder($prova, $respostas);
     }
 
-    private function createQuestoesForTest(): array
+    private function createProvaForTeste(): Prova
     {
-        $temaMock = $this->createStub(Tema::class);
-        $questaoUm = new Questao('0983421b-03f6-4fc2-b034-6f926fe8f305', $temaMock, 'Qual a melhor linguagem de programação?');
+        $temaStub = $this->createStub(Tema::class);
+        $alunoStub = $this->createStub(Aluno::class);
+
+        $prova = new Prova(Str::uuid(), $alunoStub, $temaStub);
+        $questaoUm = new Questao(Str::uuid(), $temaStub, 'Qual a melhor linguagem de programação?');
         $questaoUm->setAlternativas([
             ['alternativa' => 'PHP', 'isCorreta' => true],
             ['alternativa' => 'Java', 'isCorreta' => false],
             ['alternativa' => 'C#', 'isCorreta' => false],
             ['alternativa' => 'Python', 'isCorreta' => false],
         ]);
-
-        $questaoDois = new Questao('37b8d645-d663-4044-9ba4-ed4cda86ca80', $temaMock, 'Qual a pior linguagem de programação?');
-        $questaoDois->setAlternativas([
-            ['alternativa' => 'PHP', 'isCorreta' => false],
-            ['alternativa' => 'Java', 'isCorreta' => true],
-            ['alternativa' => 'C#', 'isCorreta' => false],
-            ['alternativa' => 'Python', 'isCorreta' => false],
-        ]);
-
-        $questaoTres = new Questao('4aea10e8-0bc6-4dd8-9faa-ea2b312c1d5f', $temaMock, 'Qual a linguagem de programação mais usada?');
-        $questaoTres->setAlternativas([
-            ['alternativa' => 'PHP', 'isCorreta' => true],
-            ['alternativa' => 'Java', 'isCorreta' => false],
-            ['alternativa' => 'C#', 'isCorreta' => false],
-            ['alternativa' => 'Python', 'isCorreta' => false],
-        ]);
-
-        $questaoQuatro = new Questao('a87c5ee8-2a2d-4540-8d1d-8cdc08d489ec', $temaMock, 'Qual a linguagem de programação menos usada?');
-        $questaoQuatro->setAlternativas([
-            ['alternativa' => 'PHP', 'isCorreta' => false],
-            ['alternativa' => 'Java', 'isCorreta' => false],
-            ['alternativa' => 'C#', 'isCorreta' => true],
-            ['alternativa' => 'Python', 'isCorreta' => false],
-        ]);
-
-        $questoesArray = [$questaoUm, $questaoDois, $questaoTres, $questaoQuatro];
-        return $questoesArray;
+        $prova->setQuestoes([$questaoUm]);
+        return $prova;
     }
 
-    private function getRespostasAlunoForaDeOrdemForTest(Prova $prova): array
+    private function getRespostasAlunoForTest(Prova $prova): array
     {
         return [
             [
-                'questaoId' => $prova->getQuestoes()[1]->getId(),
-                'respostaAluno' => 'PHP',
+                'questaoId' => $prova->getQuestoes()->first()->getId(),
+                'respostaAluno' => $prova->getQuestoes()->first()->getRespostaCorreta(),
             ],
-            [
-                'questaoId' => $prova->getQuestoes()[0]->getId(),
-                'respostaAluno' => 'Java',
-            ],
-            [
-                'questaoId' => $prova->getQuestoes()[3]->getId(),
-                'respostaAluno' => 'C#',
-            ],
-            [
-                'questaoId' => $prova->getQuestoes()[2]->getId(),
-                'respostaAluno' => 'PHP',
-            ]
         ];
     }
 }

@@ -70,7 +70,7 @@ class Questao
     {
         $alternativasCorretas = 0;
         foreach ($alternativas as $alternativa) {
-            if($alternativa['isCorreta']) {
+            if($alternativa['isCorreta'] === true) {
                 $alternativasCorretas++;
             }
             $this->alternativas->add(new Alternativa(Str::uuid(), $this, $alternativa['alternativa'], $alternativa['isCorreta']));

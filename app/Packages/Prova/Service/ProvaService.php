@@ -9,6 +9,7 @@ use App\Packages\Prova\Domain\Model\Prova;
 use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Tema\Domain\Model\Tema;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
+use Doctrine\Common\Collections\Collection;
 use Illuminate\Support\Str;
 
 class ProvaService
@@ -32,7 +33,7 @@ class ProvaService
     public function responder(Prova $prova, array $respostas): Prova
     {
         $this->throwExceptionSeProvaConcluida($prova);
-
+        $this->throwExceptionSeQuantidadeRespostasDiferenteQuantidadePerguntas($prova->getQuestoes(), $respostas);
         $respostasDtoCollection = collect();
         sort($respostas);
 
@@ -51,6 +52,13 @@ class ProvaService
         }
     }
 
+    private function throwExceptionSeTemaNaoPossuirQuestoes(array $questoesCollection): void
+    {
+        if (count($questoesCollection) === 0) {
+            throw new \Exception('Não possuem questões para esse tema.', 1664391636);
+        }
+    }
+
     private function throwExceptionSeProvaConcluida(Prova $prova): void
     {
         if ($prova->getStatus() === Prova::CONCLUIDA) {
@@ -58,10 +66,10 @@ class ProvaService
         }
     }
 
-    private function throwExceptionSeTemaNaoPossuirQuestoes(array $questoesCollection): void
+    private function throwExceptionSeQuantidadeRespostasDiferenteQuantidadePerguntas(Collection $questoes, array $respostas): void
     {
-        if (count($questoesCollection) === 0) {
-            throw new \Exception('Não possuem questões para esse tema.', 1664391636);
+        if ($questoes->count() !== count($respostas)) {
+            throw new \Exception('Quantidade de respostas diferente da quantidade de perguntas.', 1664697689);
         }
     }
 }

@@ -29,7 +29,11 @@ class QuestoesController extends Controller
 
     public function show(Questao $questao)
     {
-        return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::OK);
+        try {
+            return response()->json(['data' => QuestaoResponse::item($questao)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 
     public function store(QuestaoRequest $request)

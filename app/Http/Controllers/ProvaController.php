@@ -30,7 +30,11 @@ class ProvaController extends Controller
 
     public function show(Prova $prova)
     {
-        return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::OK);
+        try {
+            return response()->json(['data' => ProvaResponse::item($prova)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 
     public function store(Aluno $aluno, ProvaRequest $request)

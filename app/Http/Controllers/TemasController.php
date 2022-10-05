@@ -17,8 +17,12 @@ class TemasController extends Controller
 
     public function index()
     {
-        $temas = $this->temaFacade->getAll();
-        return response()->json(['data' => TemaResponse::collection($temas)], HttpStatusConstants::OK);
+        try {
+            $temas = $this->temaFacade->getAll();
+            return response()->json(['data' => TemaResponse::collection($temas)], HttpStatusConstants::OK);
+        } catch (\Exception $exception) {
+            return response()->json(ErrorResponse::item($exception), HttpStatusConstants::BAD_REQUEST);
+        }
     }
 
     public function store(TemaRequest $request)

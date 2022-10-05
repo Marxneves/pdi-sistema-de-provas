@@ -5,7 +5,6 @@ namespace App\Packages\Prova\Domain\Model;
 use App\Packages\Aluno\Domain\Model\Aluno;
 use App\Packages\Prova\Domain\Dto\RespostasProvaDto;
 use App\Packages\Questao\Domain\Model\Questao;
-use App\Packages\Questao\Response\QuestaoResponse;
 use App\Packages\Tema\Domain\Model\Tema;
 use Carbon\Carbon;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,7 +22,7 @@ class Prova
 {
     use TimestampableEntity;
 
-    const NOTA_MAXIMA = 10;
+    const NOTA_MAXIMA = 10.0;
     const CONCLUIDA = 'Concluida';
     const ABERTA = 'Aberta';
     const HORA_EM_SEGUNDOS = 3600;
@@ -41,7 +40,7 @@ class Prova
          * @ORM\GeneratedValue(strategy="CUSTOM")
          * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
          */
-        private string     $id,
+        private string $id,
 
         /**
          * @ORM\ManyToOne(
@@ -49,7 +48,7 @@ class Prova
          *     inversedBy="provas"
          * )
          */
-        private Aluno      $aluno,
+        private Aluno $aluno,
 
         /**
          * @ORM\ManyToOne(
@@ -57,16 +56,16 @@ class Prova
          *     inversedBy="provas"
          * )
          */
-        private Tema       $tema,
+        private Tema $tema,
 
         /** @ORM\Column(type="float", nullable=true) */
-        private ?float     $nota = null,
+        private ?float $nota = null,
 
         /** @ORM\Column(type="datetime", nullable=true) */
         private ?\DateTime $submetidaEm = null,
 
         /** @ORM\Column(type="string", options={"default":"Aberta"}) */
-        private ?string    $status = 'Aberta',
+        private ?string $status = 'Aberta',
     )
     {
         $this->questoes = new ArrayCollection;
@@ -76,7 +75,7 @@ class Prova
     {
         foreach ($questoesCollection as $questao) {
             /** @var Questao $questao */
-            $questaoProva = new QuestaoProva($questao->getId(), $this, $questao->getPergunta());
+            $questaoProva = new QuestaoProva(Str::uuid(), $this, $questao->getPergunta());
             $questaoProva->setAlternativas($questao->getAlternativas());
             $this->questoes->add($questaoProva);
         }
@@ -143,6 +142,7 @@ class Prova
             $questaoProva->setRespostaAluno($respostas[$key]->getRespostaAluno());
             $this->somaSeRespostaAlunoForCorreta($questaoProva, $respostas[$key], $questoesCorretas);
         }
+
         return $questoesCorretas;
     }
 
