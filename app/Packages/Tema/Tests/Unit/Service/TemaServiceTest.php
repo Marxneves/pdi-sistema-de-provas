@@ -3,8 +3,8 @@
 namespace App\Packages\Tema\Tests\Unit\Facade;
 
 
-use App\Packages\Tema\Domain\Repository\TemaRepository;
 use App\Packages\Tema\Domain\Model\Tema;
+use App\Packages\Tema\Domain\Repository\TemaRepository;
 use App\Packages\Tema\Service\TemaService;
 use Tests\TestCase;
 

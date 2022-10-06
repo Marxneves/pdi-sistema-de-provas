@@ -11,7 +11,6 @@ use App\Packages\Questao\Domain\Repository\QuestaoRepository;
 use App\Packages\Tema\Domain\Model\Tema;
 use App\Packages\Tema\Domain\Repository\TemaRepository;
 use Illuminate\Support\Str;
-use LaravelDoctrine\ORM\Facades\EntityManager;
 use Tests\TestCase;
 
 class ProvaServiceTest extends TestCase

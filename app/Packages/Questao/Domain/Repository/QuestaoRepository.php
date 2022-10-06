@@ -4,7 +4,6 @@ namespace App\Packages\Questao\Domain\Repository;
 
 use App\Packages\Base\Domain\Repository\Repository;
 use App\Packages\Questao\Domain\Model\Questao;
-use App\Packages\Questao\Response\QuestaoResponse;
 use App\Packages\Tema\Domain\Model\Tema;
 
 

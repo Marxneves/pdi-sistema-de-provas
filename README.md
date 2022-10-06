@@ -1,11 +1,8 @@
-# Agilize Boilerplate
+# Projeto PDI - Sistema de provas (Quiz)
 
 ## 📋 Pré-requisitos
 * docker
 * docker-compose
-
-## 🔩 Começando
-Faça o fork desse repositório, pronto!
 
 ## 🔧 Instalação
 Clone o projeto e entre em seu diretório
@@ -15,7 +12,12 @@ Clone o projeto e entre em seu diretório
 make build-and-serve
 ```
 
-### Levante o container
+### Após levantar o container rode para criar as tabelas e a seed
+```sh
+make db_update
+```
+
+### Nas próximas vezes só levante o container
 ```sh
 make serve
 ```
@@ -28,7 +30,7 @@ make key-generate
 ```
 ## ⚙️ Executando os testes
 ```sh
-make all-unit-tests
+make all-tests
 ```
 
 ## 🛠️ Construído com
@@ -38,8 +40,13 @@ Esse repo foi construído com as seguintes ferramentas:
 * [Laravel](https://laravel.com/)
 * [PHP 8.0.20](https://hub.docker.com/_/php?tab=tags)
 
-## ✒️ Autores
+## Migration do banco
+[Migração do banco de dados](database/migrations/Version20221004211601.php)
 
-* **Thiago Oliveira** - *Trabalho Inicial*
-* **Erivaldo Jr** - *Trabalho Inicial*
-* **Ernesto Amorim** - *Adaptação para Github público* 
+## Diagrama banco de dados
+
+![Diagrama](db_diagram.png)
+
+## ✒️ Autor
+
+* **Marx Neves** - *Trabalho ~~Inicial~~ Único*
