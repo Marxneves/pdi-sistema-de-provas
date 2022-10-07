@@ -79,7 +79,7 @@ class ProvaServiceTest extends TestCase
         $provaService = app(ProvaService::class);
         $provaCorreta = $provaService->responder($prova, $respostas);
 
-        $this->assertSame(10.0, $provaCorreta->getNota());
+        $this->assertSame(Prova::NOTA_MAXIMA, $provaCorreta->getNota());
         $this->assertSame(Prova::CONCLUIDA, $provaCorreta->getStatus());
     }
 

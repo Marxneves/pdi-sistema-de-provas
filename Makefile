@@ -22,7 +22,7 @@ help:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "/var/www/artisan doctrine:generate:proxies && composer dump-autoload && chmod -R 777 storage/proxies"
 
 db_update:
-	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan migrate && php artisan db:seed"
+	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "php artisan doctrine:migrations:migrate && php artisan db:seed"
 
 all-tests:
 	@docker-compose -f ./docker-compose.yaml exec -T api sh -c "./vendor/bin/phpunit -d memory_limit=-1"

@@ -53,6 +53,6 @@ class ProvaTest extends TestCase
         $respostaCollection->add($respostaProvaDtoMock);
         $prova->responder($respostaCollection);
 
-        $this->assertEquals(10, $prova->getNota());
+        $this->assertSame(Prova::NOTA_MAXIMA, $prova->getNota());
     }
 }
