@@ -1,0 +1,367 @@
+{
+	"info": {
+		"_postman_id": "d5add9c1-6385-4e30-9dcb-a5d47e498154",
+		"name": "PDI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19167279"
+	},
+	"item": [
+		{
+			"name": "Aluno",
+			"item": [
+				{
+					"name": "Alunos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/alunos",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Alunos",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"Gustavo Silva Augusto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/alunos",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"alunos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AlunoProvas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/alunos/991641ff-bd1f-408b-80ac-4f0351cc3972/provas",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"alunos",
+								"991641ff-bd1f-408b-80ac-4f0351cc3972",
+								"provas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tema",
+			"item": [
+				{
+					"name": "Temas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/temas",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"temas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Temas",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\":\"PHP\",\n    \"slugname\":\"php\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/temas",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"temas"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questao",
+			"item": [
+				{
+					"name": "Questoes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/questoes",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"questoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Questao",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/questoes/70d55a1f-821c-4fe2-827a-f27e75f1d05b",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"questoes",
+								"70d55a1f-821c-4fe2-827a-f27e75f1d05b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Questoes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pergunta\":\"Qual a melhor linguagem?\",\n    \"temaSlugname\": \"php\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/questoes",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"questoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Respostas",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"alternativas\": [\n        {\n            \"resposta\": \"PHP\",\n            \"isCorreta\": true\n        },\n        {\n            \"resposta\": \"Java\",\n            \"isCorreta\": false\n        },\n        {\n            \"resposta\": \"JavaScript\",\n            \"isCorreta\": false\n        },\n        {\n            \"resposta\": \"C#\",\n            \"isCorreta\": false\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/questoes/70d55a1f-821c-4fe2-827a-f27e75f1d05b",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"questoes",
+								"70d55a1f-821c-4fe2-827a-f27e75f1d05b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prova",
+			"item": [
+				{
+					"name": "Criar Prova",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tema\":\"linguagem_programacao\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/alunos/991641ff-bd1f-408b-80ac-4f0351cc3972/prova",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"alunos",
+								"991641ff-bd1f-408b-80ac-4f0351cc3972",
+								"prova"
+							],
+							"query": [
+								{
+									"key": "tema",
+									"value": "linguagem_programacao",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar Respostas",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"respostas\": [\n        {\n            \"questaoId\": \"01a7817c-1d2c-44f8-8a42-3eece030e6c8\",\n            \"respostaAluno\": \"Angule.JS\"\n        },\n        {\n            \"questaoId\": \"3a907fa2-754a-4989-a4f1-66ec0d17f614\",\n            \"respostaAluno\": \"Java\"\n        },\n        {\n            \"questaoId\": \"7e02bfda-e261-47a9-a6e6-a46e110b88ee\",\n            \"respostaAluno\": \"C#\"\n        },\n        {\n            \"questaoId\": \"7f46e848-e105-4cd4-9712-9cdfaef58b1e\",\n            \"respostaAluno\": \"Angule.JS\"\n        },\n        {\n            \"questaoId\": \"98fc8078-e29b-4793-a1da-ec34d3be37db\",\n            \"respostaAluno\": \"PHP\"\n        },\n        {\n            \"questaoId\": \"ad098d29-5b76-4778-ae07-469dc7cec23f\",\n            \"respostaAluno\": \"Python\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/api/provas/fef62eec-674c-47b0-a475-f4a68ebe5bce",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"provas",
+								"fef62eec-674c-47b0-a475-f4a68ebe5bce"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Prova",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/provas",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"provas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProvaId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/api/provas/fef62eec-674c-47b0-a475-f4a68ebe5bce",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"api",
+								"provas",
+								"fef62eec-674c-47b0-a475-f4a68ebe5bce"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

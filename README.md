@@ -1,6 +1,10 @@
 # Projeto PDI - Sistema de provas (Quiz)
 
-## 📋 Pré-requisitos
+## 📋 Requisitos do projeto
+[Pdf com os requisitos](ProjetoPDI_Sistema_de_Provas(Quiz).pdf)
+
+
+## 📋 Pré-requisitos para instalação
 * docker
 * docker-compose
 
@@ -47,6 +51,9 @@ Esse repo foi construído com as seguintes ferramentas:
 
 ![Diagrama](db_diagram.png)
 
+## Collection do postman
+[Collection do postman](PDI.postman_collection.json)
+
 ## ✒️ Autor
 
-* **Marx Neves** - *Trabalho ~~Inicial~~ Único*
+* **Marx Neves** 
